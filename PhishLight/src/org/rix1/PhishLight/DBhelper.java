@@ -1,4 +1,4 @@
-package org.rix1.phishilight2;
+package org.rix1.PhishLight;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -47,4 +47,3 @@ public class DBhelper extends SQLiteOpenHelper{
         return(c.getString(1));
     }
 }
-

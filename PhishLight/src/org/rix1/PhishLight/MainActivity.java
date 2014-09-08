@@ -1,4 +1,4 @@
-package org.rix1.phishilight2;
+package org.rix1.PhishLight;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,7 +20,9 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+
 public class MainActivity extends Activity {
+
     /**
      * Called when the activity is first created.
      */
@@ -52,7 +54,7 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Log.d("APP: ", "Button clicked");
 
-                callHome();
+//                callHome();
 
 
                 if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
@@ -77,16 +79,19 @@ public class MainActivity extends Activity {
         });
     }
 
+/*
     public void callHome(){
         String data = "Hi, heres my address: " + getAddress();
         Toast.makeText(context, data, Toast.LENGTH_LONG);
 
-        /* This code is currently not working...
+        */
+/*  This code is currently not working...
         PhishingHelper phishingHelper = new PhishingHelper(context);
         phishingHelper.insert(getAddress());
         String extract = phishingHelper.getIP(phishingHelper.getAll());
         Toast.makeText(context, extract, Toast.LENGTH_LONG).show();
-        */
+        *//*
+
     }
 
 
@@ -108,6 +113,7 @@ public class MainActivity extends Activity {
         }
         return null;
     }
+*/
 
     public void databaseTest(){
         dbHelper = new DBhelper(this);
