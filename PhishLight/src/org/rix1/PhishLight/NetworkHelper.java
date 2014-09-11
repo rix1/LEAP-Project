@@ -46,18 +46,12 @@ public class NetworkHelper extends AsyncTask<String, Void, Boolean> {
         return null;
     }
 
-    public void makePOSTRequest() {
+    public void makePOSTRequest(List data) {
         counter++;
         httpPost = new HttpPost(POST_URI);
 
-        // Post data: 'username=USERNAME & email=EMAIL & fullname=FULLNAME & age=AGE & location=LOCATION & gender=GENDER'
-        List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(2);
-        nameValuePairs.add(new BasicNameValuePair("username", "ANDROID_user " + counter));
-        nameValuePairs.add(new BasicNameValuePair("email", "ANDROID_email"));
-        nameValuePairs.add(new BasicNameValuePair("fullname", "ANDROID_fullname"));
-        nameValuePairs.add(new BasicNameValuePair("age", "ANDROID_age"));
-        nameValuePairs.add(new BasicNameValuePair("location", "ANDROID_location"));
-        nameValuePairs.add(new BasicNameValuePair("gender", "ANDROID_gender"));
+// Format: 'username=USERNAME & email=EMAIL & fullname=FULLNAME & age=AGE & location=LOCATION & gender=GENDER'
+        List<NameValuePair> nameValuePairs = data;
 
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));

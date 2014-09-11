@@ -16,10 +16,9 @@ This should cover pretty much anything you need to set up the developer environm
 	
   * [JGit plugin to Eclipse](http://eclipse.org/egit/download/) Use this update site: http://download.eclipse.org/egit/updates
   * [Android Development Tools for Eclipse](http://developer.android.com/tools/sdk/eclipse-adt.html), aka ADT Plugin. Use this update site: https://dl-ssl.google.com/android/eclipse/
-  * [Eclipse Integration Gradle](https://github.com/spring-projects/eclipse-integration-gradle/), use this update site: http://dist.springsource.com/release/TOOLS/gradle
 
 
-### Intalling Android SDK
+### Installing Android SDK
 
 If the installation cannot find the JDK, check out the following [answer](http://stackoverflow.com/a/9818884)
 
@@ -33,13 +32,7 @@ Click the menu bar:
 		
 	Help > Install New Software...
 		
-On the right hand select:
-
-	Add...
-		
-Enter a name of your choice, and paste in the link above (the one stated after 'Use this update site:'). And push:
-		
-	OK
+On the right hand select `Add...`. Enter a name of your choice, and paste in the link above (the one stated after 'Use this update site:'). And click `OK`
 		
 After the add-ons have loaded in the field below, click 
 
@@ -60,31 +53,18 @@ In the now visible Git tab, click the link:
 	
 In the location section, paste the following link in the URI field:
 
-	https://github.com/rix1/CSC3003S_LEAP.git
-
-The plugin will down autofill a couple of the fields. In the authentication section, write your own Github username and password and click *Next*. The branches will now load. Select *master* and click next. Change the directory to your preferred workspace, and leave everything else as it is. Hit 
-
-	Finish
-
-The plugin now downloads the source code from Github. When it is finished, go to:
-
-	File > Import...
-
-In the search field, type *'Gradle'*, select 
-
-	Gradle Project
-
-and push *next*. In the Import Gradle Project view, click *Browse* and navigate to the root folder of the project cloned from Git. When this is selected, click
-
-	Build Model
+	https://github.com/rix1/LEAP-Project.git
 	
-Eclipse will then work for a bit and import the project as well as download dependencies. When this is done you're *all done!*.
+
+The plugin will down autofill a couple of the fields. In the authentication section, write your own Github username and password and click *Next*. The branches will now load. Select *master* and click next. Change the directory to your preferred workspace, and leave everything else as it is. Hit `Finish`
+
+I'm not sure on the last bits, but I think you should just go `file > import existing project` or something.
 
 ### Problems
 
-You might have to set your android environmental variable? 
+You might have to set your android environmental variable in windows. You do this in the Windows Control Panel under `System settings` or something.
 
 
 ### Running
 
-Click 'Run' in Eclipse and it will start a virtual device. If you want to run on your own phone you connect it with a USB cable and click 'Run'
+Click 'Run' in Eclipse and it will start a virtual device. If you want to run on your own phone you connect it with a USB cable and click `Run`.
