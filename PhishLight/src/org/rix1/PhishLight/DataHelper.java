@@ -24,6 +24,7 @@ public class DataHelper {
     public DataHelper(Context c) {
         this.context = c;
         String RekardString = "";
+        String rikard = "Rikards String";
     }
 
 
