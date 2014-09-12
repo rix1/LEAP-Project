@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PhishGuard</string>
+    <string name="comment">times</string>
+    <string name="hello_world">Hello world</string>
+    <string name="action_about">About</string>
+    <string name="about_title">Gunnar Har En Tittel</string>
+    <string name="sample_date">12.09.2014 14:13:12</string>
+    <string name="prev_connection">Previous connection: </string>
+    <string name="application_desc_start">This application has made outgoing connections</string>
+    <string name="application_desc_end">times. Do you want to get notified next it happens?</string>
 </resources>
