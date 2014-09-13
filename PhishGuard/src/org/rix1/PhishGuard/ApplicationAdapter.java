@@ -3,6 +3,7 @@ package org.rix1.PhishGuard;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +63,18 @@ public class ApplicationAdapter extends ArrayAdapter<ApplicationInfo>{
             long timestamp = (temp != null)? temp.getLatestStamp():-1;
             int connectionsMade = (temp != null)? temp.getConnectionsMade():-1;
 
+
             appName.setText(data.loadLabel(packageManager));
             updateCount.setText(Integer.toString(connectionsMade));
             lastUpdate.setText(utils.formattedDate(timestamp));
             appIcon.setImageDrawable(data.loadIcon(packageManager));
+
+            if(temp.shouldWarn()){
+                updateCount.setText(Integer.toString(connectionsMade));
+                updateCount.setTextColor(context.getResources().getColor(R.color.red));
+            }else
+                updateCount.setTextColor(context.getResources().getColor(R.color.darkgrey));
+                updateCount.setText(Integer.toString(connectionsMade));
         }
         return view;
     }

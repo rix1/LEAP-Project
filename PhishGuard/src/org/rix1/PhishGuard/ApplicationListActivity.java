@@ -8,12 +8,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -69,12 +71,15 @@ public class ApplicationListActivity extends ListActivity{
         builder.setPositiveButton("Yes, notify me", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setNotificationFlag(true);
+                listAdapter.notifyDataSetChanged();
+                print();
                 dialog.cancel();
             }
         });
         builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setNotificationFlag(false);
+                listAdapter.notifyDataSetChanged();
                 dialog.cancel();
             }
         });
@@ -82,6 +87,12 @@ public class ApplicationListActivity extends ListActivity{
         builder.show();
     }
 
+    public void print(){
+        Collections.sort(outNetworkApps);
+        for (Application app: outNetworkApps){
+            Log.d("APP_SORT",app.getConnectionsMade() + " : " + app.getApplicationName());
+        }
+    }
 
     protected void onListItemClick(ListView listview, View view, int position, long id){
         super.onListItemClick(listview, view, position, id);

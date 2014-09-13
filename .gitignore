@@ -1,5 +1,9 @@
 # Created by http://www.gitignore.io
 
+### Custom Project files ###
+
+phishlightserver/
+
 ### Android ###
 # Built application files
 *.apk

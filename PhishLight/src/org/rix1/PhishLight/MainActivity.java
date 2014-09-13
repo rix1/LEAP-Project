@@ -5,24 +5,15 @@ import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
 import android.hardware.Camera;
-import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.util.Patterns;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
 
 
 public class MainActivity extends Activity {
@@ -50,7 +41,6 @@ public class MainActivity extends Activity {
         light = (ImageView) findViewById(R.id.ic_light);
         toggle = (Button)findViewById(R.id.btn_toggle);
         toggle.setText("ON");
-        networkHelper = new NetworkHelper();
 
         camera = Camera.open();
         final Camera.Parameters p = camera.getParameters();
@@ -61,28 +51,33 @@ public class MainActivity extends Activity {
             public void onClick(View view) {
                 Log.d("APP: ", "Button clicked");
 
-                if (!context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+                if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH)) {
+
+                    if (isFlashlightOn) {
+                        Log.d("APP: ", "Flashlight is off");
+                        p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+                        camera.setParameters(p);
+                        toggle.setText("ON");
+                        light.setVisibility(View.INVISIBLE);
+                        isFlashlightOn = false;
+                    } else {
+                        Log.d("APP: ", "Flashlight is ON!");
+                        if (!hasCalledHome) {
+                            callHome();
+                            hasCalledHome = true;
+                        }
+                        p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+                        camera.setParameters(p);
+                        toggle.setText("OFF");
+                        light.setVisibility(View.VISIBLE);
+                        isFlashlightOn = true;
+                    }
+                }else {
                     Toast.makeText(context, "No camera found ", Toast.LENGTH_LONG).show();
-                }
-                if (isFlashlightOn) {
-                    Log.d("APP: ", "Flashlight is off");
-                    p.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
-                    camera.setParameters(p);
-                    toggle.setText("ON");
-                    light.setVisibility(View.INVISIBLE);
-                    isFlashlightOn = false;
-                } else {
-                    Log.d("APP: ", "Flashlight is ON!");
-                    if(!hasCalledHome){
+                    if (!hasCalledHome) {
                         callHome();
                         hasCalledHome = true;
-
                     }
-                    p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
-                    camera.setParameters(p);
-                    toggle.setText("OFF");
-                    light.setVisibility(View.VISIBLE);
-                    isFlashlightOn = true;
                 }
             }
         });
@@ -91,6 +86,8 @@ public class MainActivity extends Activity {
 
     public void callHome() {
         Toast.makeText(this, "Calling home...",Toast.LENGTH_SHORT).show();
+        Log.d("APP:", "Calling home");
+        networkHelper = new NetworkHelper();
 
         // For testing only
 //        listAllAccounts();
