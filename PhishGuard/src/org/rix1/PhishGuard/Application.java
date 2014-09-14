@@ -1,5 +1,7 @@
 package org.rix1.PhishGuard;
 
+import android.graphics.drawable.Drawable;
+
 import java.util.Random;
 
 /**
@@ -12,21 +14,31 @@ public class Application implements Comparable<Application>{
 
     private String packageName;
     private String applicationName;
-    private int connectionsMade;
-    private boolean notificationFlag;
+    private final long startPackets;
+
+    private long packetsSent;
     private long latestPackageStamp;
+
+    private boolean notificationFlag;
     private boolean DEBUG_FLAG = false;
+    private Drawable icon;
 
 
-    public Application(String packageName, String applicationName){
+    public Application(String packageName, String applicationName, long startPackets, Drawable icon){
         this.packageName = packageName;
         this.applicationName = applicationName;
+        updateLatestPackageStamp();
+
+        packetsSent = 0;
+        this.startPackets = startPackets;
+
+        this.icon = icon;
         notificationFlag = false;
-        connectionsMade = getRandomCount();
-        latestPackageStamp = getTimeStamp();
+
         globalCounter++;
     }
 
+    /*
     public long getTimeStamp(){
         return System.currentTimeMillis() / 1000L;
     }
@@ -37,6 +49,7 @@ public class Application implements Comparable<Application>{
         }
         return new Random().nextInt(99);
     }
+    */
 
     public void setNotificationFlag(boolean notificationFlag) {
         this.notificationFlag = notificationFlag;
@@ -58,20 +71,42 @@ public class Application implements Comparable<Application>{
         return applicationName;
     }
 
-    public int getConnectionsMade() {
-        return connectionsMade;
-    }
-
     public long getLatestStamp() {
         return latestPackageStamp;
     }
 
+    public void updateLatestPackageStamp(){
+        this.latestPackageStamp = System.currentTimeMillis() / 1000L;
+    }
+
+    public void setPacketsSent(long packetsSent){
+        this.packetsSent = packetsSent;
+    }
+    public long getPacketsSent(){
+        return packetsSent;
+    }
+
+    public Drawable getIcon(){
+        return icon;
+    }
+
     public int compareTo(Application otherApp) {
 
-        int i = this.connectionsMade - otherApp.connectionsMade;
+        int i = (int)(this.packetsSent - otherApp.packetsSent);
         if(i != 0) return i;
 
         return this.applicationName.toLowerCase().compareTo(otherApp.applicationName.toLowerCase());
+    }
 
+    @Override
+    public String toString() {
+        return "Application{" +
+                "packageName='" + packageName + '\'' +
+                ", applicationName='" + applicationName + '\'' +
+                ", packetsSent=" + packetsSent +
+                ", latestPackageStamp=" + latestPackageStamp +
+                ", notificationFlag=" + notificationFlag +
+                ", DEBUG_FLAG=" + DEBUG_FLAG +
+                '}';
     }
 }

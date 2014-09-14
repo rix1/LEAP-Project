@@ -30,6 +30,7 @@ public class ApplicationListActivity extends ListActivity{
     private ApplicationAdapter listAdapter = null;
     private ArrayList<Application> outNetworkApps;
     private Application currentApplication;
+    private NetworkService networkService;
 
 
     public void onCreate(Bundle savedInstanceState){
@@ -38,6 +39,7 @@ public class ApplicationListActivity extends ListActivity{
         pm = getPackageManager();
         new LoadApplications().execute();
         outNetworkApps = new ArrayList<Application>();
+        networkService = new NetworkService();
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -47,22 +49,8 @@ public class ApplicationListActivity extends ListActivity{
         return true;
     }
 
-
-    private void updateApplist(){
-        //TODO: Make call to networkService and get list of applications.
-        outNetworkApps.clear();
-
-        for(ApplicationInfo appI : appInfoList){
-            try {
-                outNetworkApps.add(new Application(appI.packageName, appI.loadLabel(pm).toString()));
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
     private void displayApplicationDialog(){
-        String message = getString(R.string.application_desc_start) + " " +currentApplication.getConnectionsMade() + " " +getString(R.string.application_desc_end);
+        String message = getString(R.string.application_desc_start) + " " + currentApplication.getPacketsSent() + " " +getString(R.string.application_desc_end);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(currentApplication.getApplicationName());
@@ -71,14 +59,15 @@ public class ApplicationListActivity extends ListActivity{
         builder.setPositiveButton("Yes, notify me", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setNotificationFlag(true);
+                Log.d("APP_LIST", currentApplication.toString());
                 listAdapter.notifyDataSetChanged();
-                print();
                 dialog.cancel();
             }
         });
         builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setNotificationFlag(false);
+                Log.d("APP_LIST", currentApplication.toString());
                 listAdapter.notifyDataSetChanged();
                 dialog.cancel();
             }
@@ -87,27 +76,16 @@ public class ApplicationListActivity extends ListActivity{
         builder.show();
     }
 
-    public void print(){
-        Collections.sort(outNetworkApps);
-        for (Application app: outNetworkApps){
-            Log.d("APP_SORT",app.getConnectionsMade() + " : " + app.getApplicationName());
-        }
-    }
-
     protected void onListItemClick(ListView listview, View view, int position, long id){
         super.onListItemClick(listview, view, position, id);
 
-        ApplicationInfo app = appInfoList.get(position);
-        setCurrentApplication(app.packageName);
+        setCurrentApplication(outNetworkApps.get(position));
         displayApplicationDialog();
 
     }
 
-    public void setCurrentApplication(String packageName){
-        for(Application app : outNetworkApps){
-            if(app.getPackageName().equals(packageName))
-                currentApplication = app;
-        }
+    public void setCurrentApplication(Application application){
+        this.currentApplication = application;
     }
 
     // Maybe remove this?
@@ -137,8 +115,9 @@ public class ApplicationListActivity extends ListActivity{
         protected Void doInBackground(Void... voids) {
 
             appInfoList = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
-            updateApplist();
-            listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, appInfoList, outNetworkApps);
+            outNetworkApps = networkService.getTraffic(appInfoList, pm);
+            outNetworkApps = networkService.getTraffic(appInfoList, pm); // Probably need an update method...
+            listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, outNetworkApps);
             return null;
         }
 

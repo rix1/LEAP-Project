@@ -1,10 +1,76 @@
 package org.rix1.PhishGuard;
 
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
+import android.net.TrafficStats;
+import android.os.Handler;
+import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by rikardeide on 12/09/14.
  */
 
 public class NetworkService {
 
+    private long mStartTXpackets = 0; // TX is transmitted
+    private ArrayList<Application> outApplications;
+    private PackageManager packageManager;
+    private boolean firstTimeFlag = true;
+
+
+    public NetworkService(){
+        outApplications = new ArrayList<Application>();
+    }
+
+    public ArrayList<Application> getTraffic(List<ApplicationInfo> appInfo, PackageManager packageManager){
+
+        if(firstTimeFlag){
+            // TODO: Fetch from database
+            Log.d("APP_NETWORK" , "Gathering info for first time... Number of apps: " + appInfo.size());
+            firstTimeFlag = false;
+        }else {
+            Log.d("APP_NETWORK" , "Info have already been gathered. Size of array: " + outApplications.size());
+        }
+
+        int uid;
+        this.packageManager = packageManager;
+
+        if(appInfo != null) {
+            for (ApplicationInfo appI : appInfo) {
+                uid = appI.uid;
+                mStartTXpackets = TrafficStats.getUidTxPackets(uid);
+
+                if(mStartTXpackets != 0){
+                    Application app = contains(appI.packageName);
+                    if(app == null){
+                        addApplication(appI);
+                    } else updateApplication(app);
+                }
+            }
+        }else Log.d("APP_NETWORK", "Something went wrong...");
+
+        return outApplications;
+    }
+    private void updateApplication(Application app){
+        // Because Application is mutable we can just change the app object itself.
+        app.updateLatestPackageStamp();
+        app.setPacketsSent(mStartTXpackets);
+    }
+
+    private void addApplication(ApplicationInfo appI){
+        outApplications.add(new Application(appI.packageName, appI.loadLabel(packageManager).toString(), mStartTXpackets, appI.loadIcon(packageManager)));
+    }
+
+    private Application contains(String packageName){
+        for (Application app: outApplications){
+            if(app.getPackageName().equals(packageName)) {
+                return app;
+            }
+        }
+        return null;
+    }
 }

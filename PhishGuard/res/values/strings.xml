@@ -7,6 +7,6 @@
     <string name="about_title">Gunnar Har En Tittel</string>
     <string name="sample_date">12.09.2014 14:13:12</string>
     <string name="prev_connection">Previous connection: </string>
-    <string name="application_desc_start">This application has made outgoing connections</string>
-    <string name="application_desc_end">times. Do you want to get notified next it happens?</string>
+    <string name="application_desc_start">This application has sent</string>
+    <string name="application_desc_end">packets. This is XX since last time. Do you want to get notified next it happens?</string>
 </resources>
