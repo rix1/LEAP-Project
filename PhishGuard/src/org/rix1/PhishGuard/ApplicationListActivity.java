@@ -121,6 +121,12 @@ public class ApplicationListActivity extends ListActivity{
         this.currentApplication = application;
     }
 
+    public void gunnar(){
+        outNetworkApps = networkService.getTraffic(allApplications, pm);
+        outNetworkApps = networkService.getTraffic(allApplications, pm); // Probably need an update method...
+        listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, outNetworkApps);
+    }
+
 
 
 
@@ -138,9 +144,11 @@ public class ApplicationListActivity extends ListActivity{
             protected Void doInBackground(Void... voids) {
 
                 allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
-                outNetworkApps = networkService.getTraffic(allApplications, pm);
-                outNetworkApps = networkService.getTraffic(allApplications, pm); // Probably need an update method...
-                listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, outNetworkApps);
+                gunnar();
+//                outNetworkApps = networkService.getTraffic(allApplications, pm);
+//                outNetworkApps = networkService.getTraffic(allApplications, pm); // Probably need an update method...
+//                listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, outNetworkApps);
+
                 return null;
             }
 
