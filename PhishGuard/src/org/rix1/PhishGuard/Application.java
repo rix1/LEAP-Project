@@ -2,14 +2,13 @@ package org.rix1.PhishGuard;
 
 import android.graphics.drawable.Drawable;
 
-import java.util.ArrayList;
-import java.util.Random;
 import java.util.Stack;
 
 /**
  * Created by Rikard Eide on 12/09/14.
  * Description:
  */
+
 public class Application implements Comparable<Application>{
 
     private static int globalCounter = 0;

@@ -1,4 +1,4 @@
-package org.rix1.PhishGuard;
+package org.rix1.PhishGuard.adapter;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,6 +9,10 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import org.rix1.PhishGuard.R;
+import org.rix1.PhishGuard.Application;
+import org.rix1.PhishGuard.utils.*;
+
 
 import java.util.ArrayList;
 
@@ -28,6 +32,8 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
         this.context = context;
         packageManager = context.getPackageManager();
         this.trackedApplications = trackedApplications;
+
+        Log.d("APP_ADAPTER", "INVOKED NOW!");
     }
 
     public int getCount(){
@@ -38,17 +44,18 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
         return position;
     }
 
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        Log.d("APP_ADAPTER", "Getting view...");
 
-        if(view == null){
+        if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = layoutInflater.inflate(R.layout.app_list_row, null);
         }
 
         Application app = trackedApplications.get(position);
 
-        if(app != null){
+        if (app != null) {
             int count = (int) app.getPacketsSent();
 
             TextView appName = (TextView) view.findViewById(R.id.application_name);
@@ -61,22 +68,24 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             appName.setText(app.getApplicationName());
 
 
-            String countString = (count >1000) ? Integer.toString(count/1000) + "k":Integer.toString(count);
+            String countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
 
             updateCount.setText(countString);
-            lastUpdate.setText(utils.formattedDate(app.getLatestStamp()));
-            appIcon.setImageDrawable(app.getIcon());
+            lastUpdate.setText(Utils.formattedDate(app.getLatestStamp()));
+            if(app.getIcon() != null)
+                appIcon.setImageDrawable(app.getIcon());
 
-            if(app.shouldWarn()){
+            if (app.shouldWarn()) {
                 updateCount.setTextColor(context.getResources().getColor(R.color.red));
                 updateCount.setText(countString);
-            }else {
+            } else {
                 updateCount.setTextColor(context.getResources().getColor(R.color.darkgrey));
                 updateCount.setText(countString);
             }
         }
         return view;
     }
+
 
     // Warning! Might return null
     public Application getApplication(String packageName){
