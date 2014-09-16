@@ -8,6 +8,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.*;
 import android.widget.ListView;
@@ -25,9 +26,9 @@ import java.util.List;
  * Description:
  */
 
-public class AllAppsFragment extends CustomListFragment {
+public class AllAppsFragment extends ListFragment {
 
-/*
+
     private PackageManager pm = null;
     private List<ApplicationInfo> trackedApplications = null;
     private List<ApplicationInfo> allApplications = null;
@@ -120,7 +121,7 @@ public class AllAppsFragment extends CustomListFragment {
          * so this is done in a Async Task to take resources off the main thread
          */
 
-   /*     private class LoadApplications extends AsyncTask<Void, Void, Void> {
+        private class LoadApplications extends AsyncTask<Void, Void, Void> {
 
             private ProgressDialog progress = null;
 
@@ -143,7 +144,7 @@ public class AllAppsFragment extends CustomListFragment {
              * @param list A list with info with META_DATA from all applications
              * @return list of all applications that can be started.
              */
-/*
+
             private List<ApplicationInfo> checkForLaunchIntent(List<ApplicationInfo> list) {
                 ArrayList<ApplicationInfo> applicationList = new ArrayList<ApplicationInfo>();
 
@@ -180,5 +181,5 @@ public class AllAppsFragment extends CustomListFragment {
 
             }
         }
-    */
+
 }
