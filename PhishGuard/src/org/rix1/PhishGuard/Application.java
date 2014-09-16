@@ -2,7 +2,9 @@ package org.rix1.PhishGuard;
 
 import android.graphics.drawable.Drawable;
 
+import java.util.ArrayList;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * Created by Rikard Eide on 12/09/14.
@@ -23,11 +25,12 @@ public class Application implements Comparable<Application>{
     private boolean DEBUG_FLAG = false;
     private Drawable icon;
 
+    private Stack<Datalog> datalog;
 
-    public Application(String packageName, String applicationName, long startPackets, Drawable icon){
+
+    public Application(String packageName, String applicationName, long startPackets, long startBytes, Drawable icon){
         this.packageName = packageName;
         this.applicationName = applicationName;
-        updateLatestPackageStamp();
 
         packetsSent = 0;
         this.startPackets = startPackets;
@@ -35,7 +38,30 @@ public class Application implements Comparable<Application>{
         this.icon = icon;
         notificationFlag = false;
 
+        datalog = new Stack<Datalog>();
         globalCounter++;
+
+        updateLatestPackageStamp();
+        logData(startPackets, startBytes, latestPackageStamp);
+    }
+
+
+    /**
+     * Check if we should update this dataobject
+     * @param packet
+     * @param bytes
+     * @param timeStamp
+     * @return True if new data has been recorded. This will be used to send notifications.
+     */
+    public boolean logData(long packet, long bytes, long timeStamp){
+        if(!datalog.empty()){
+            Datalog prevLog = datalog.peek();
+            if(prevLog.getByteSinceBoot() < bytes){ // Indicates that packets have been sent
+                datalog.push(new Datalog(packet, bytes, timeStamp));
+                return true;
+            } else return false;
+        }else datalog.add(new Datalog(packet, bytes, timeStamp));
+        return true;
     }
 
     /*

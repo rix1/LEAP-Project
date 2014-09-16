@@ -4,19 +4,21 @@ package org.rix1.PhishGuard;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
-import android.os.Handler;
 import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Class for managing network related stuff.
+ * Will most likely be modified in the future to extend an Android service.
  * Created by rikardeide on 12/09/14.
  */
 
 public class NetworkService {
 
-    private long mStartTXpackets = 0; // TX is transmitted
+    private long startTXpackets = 0; // TX is transmitted
+    private long startTXbytes = 0;
     private ArrayList<Application> outApplications;
     private PackageManager packageManager;
     private boolean firstTimeFlag = true;
@@ -39,12 +41,14 @@ public class NetworkService {
         int uid;
         this.packageManager = packageManager;
 
+
         if(appInfo != null) {
             for (ApplicationInfo appI : appInfo) {
                 uid = appI.uid;
-                mStartTXpackets = TrafficStats.getUidTxPackets(uid);
+                startTXpackets = TrafficStats.getUidTxPackets(uid);
+                startTXbytes = TrafficStats.getUidRxBytes(uid);
 
-                if(mStartTXpackets != 0){
+                if(startTXpackets != 0){
                     Application app = contains(appI.packageName);
                     if(app == null){
                         addApplication(appI);
@@ -58,11 +62,11 @@ public class NetworkService {
     private void updateApplication(Application app){
         // Because Application is mutable we can just change the app object itself.
         app.updateLatestPackageStamp();
-        app.setPacketsSent(mStartTXpackets);
+        app.setPacketsSent(startTXpackets);
     }
 
     private void addApplication(ApplicationInfo appI){
-        outApplications.add(new Application(appI.packageName, appI.loadLabel(packageManager).toString(), mStartTXpackets, appI.loadIcon(packageManager)));
+        outApplications.add(new Application(appI.packageName, appI.loadLabel(packageManager).toString(), startTXpackets, startTXbytes, appI.loadIcon(packageManager)));
     }
 
     private Application contains(String packageName){

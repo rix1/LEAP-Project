@@ -9,4 +9,10 @@
     <string name="prev_connection">Previous connection: </string>
     <string name="application_desc_start">This application has sent</string>
     <string name="application_desc_end">packets. This is XX since last time. Do you want to get notified next it happens?</string>
+    <string name="android_security">
+        A central design point of the Android security architecture is that no application, by default,
+        has permission to perform any operations that would adversely impact other applications, the operating system, or the user.
+        This includes reading or writing the user\'s private data (such as contacts or emails), reading or writing another application\'s
+        files, performing network access, keeping the device awake, and so on.
+    </string>
 </resources>

@@ -7,4 +7,12 @@
         android:showAsAction="always|withText"
         android:title="@string/action_about"/>
 
+<!--
+    <item android:id="@+id/menu_switch_item"
+          android:title="Show all"
+          android:showAsAction="always"
+          android:actionLayout="@layout/switch_layout"
+        />
+-->
+
 </menu>
