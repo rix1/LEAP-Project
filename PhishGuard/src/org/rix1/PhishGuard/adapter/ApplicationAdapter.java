@@ -33,7 +33,6 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
         packageManager = context.getPackageManager();
         this.trackedApplications = trackedApplications;
 
-        Log.d("APP_ADAPTER", "INVOKED NOW!");
     }
 
     public int getCount(){
@@ -46,7 +45,6 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
-        Log.d("APP_ADAPTER", "Getting view...");
 
         if (view == null) {
             LayoutInflater layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -75,7 +73,7 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             if(app.getIcon() != null)
                 appIcon.setImageDrawable(app.getIcon());
 
-            if (app.shouldWarn()) {
+            if (app.isTracked()) {
                 updateCount.setTextColor(context.getResources().getColor(R.color.red));
                 updateCount.setText(countString);
             } else {

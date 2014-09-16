@@ -23,59 +23,50 @@ public class NetworkService {
     private ArrayList<Application> outApplications;
     private PackageManager packageManager;
     private boolean firstTimeFlag = true;
+    private PackageManager pm;
 
 
-    public NetworkService(){
-        outApplications = new ArrayList<Application>();
+    public NetworkService(PackageManager pm){
+        this.pm = pm;
     }
 
-    public ArrayList<Application> getTraffic(List<ApplicationInfo> appInfo, PackageManager packageManager){
+    public ArrayList<Application> init(List<ApplicationInfo> appInfo){
 
-        if(firstTimeFlag){
-            // TODO: Fetch from database
-            Log.d("APP_NETWORK" , "Gathering info for first time... Number of apps: " + appInfo.size());
-            firstTimeFlag = false;
-        }else {
-            Log.d("APP_NETWORK" , "Info have already been gathered. Size of array: " + outApplications.size());
-        }
+        ArrayList<Application> returnList = new ArrayList<Application>();
+        // Should return a list of all applicaitons
+        // having outoing communications
 
         int uid;
-        this.packageManager = packageManager;
-
-
-        if(appInfo != null) {
-            for (ApplicationInfo appI : appInfo) {
+        if(appInfo != null){
+            for (ApplicationInfo appI : appInfo){
                 uid = appI.uid;
                 startTXpackets = TrafficStats.getUidTxPackets(uid);
-                startTXbytes = TrafficStats.getUidRxBytes(uid);
+                startTXbytes = TrafficStats.getUidTxBytes(uid);
 
-                if(startTXpackets != 0){
-                    Application app = contains(appI.packageName);
-                    if(app == null){
-                        addApplication(appI);
-                    } else updateApplication(app);
+                if(startTXbytes > 0){
+                    returnList.add(new Application(uid, appI.packageName, appI.loadLabel(packageManager).toString(), startTXpackets, startTXbytes, appI.loadIcon(packageManager)));
                 }
             }
-        }else Log.d("APP_NETWORK", "Something went wrong...");
-
-        return outApplications;
-    }
-    private void updateApplication(Application app){
-        // Because Application is mutable we can just change the app object itself.
-        app.updateLatestPackageStamp();
-        app.setPacketsSent(startTXpackets);
+        }
+        return returnList; // Should now contain all applications having sent more than one packet  since boot.
     }
 
-    private void addApplication(ApplicationInfo appI){
-        outApplications.add(new Application(appI.packageName, appI.loadLabel(packageManager).toString(), startTXpackets, startTXbytes, appI.loadIcon(packageManager)));
-    }
+    public ArrayList<Application> update(ArrayList<Application> applications){
+        // Should return an updated list containting updated information.
+        int uid;
 
-    private Application contains(String packageName){
-        for (Application app: outApplications){
-            if(app.getPackageName().equals(packageName)) {
-                return app;
+        for (Application app : applications){
+            uid = app.getUid();
+            startTXpackets = TrafficStats.getUidTxPackets(uid);
+            startTXbytes = TrafficStats.getUidTxBytes(uid);
+
+            if(startTXbytes > app.getStartTXBytes()){ // This means the traffic has increased
+                app.update(startTXpackets, startTXbytes, System.currentTimeMillis());
+                if(app.isTracked()){
+                    app.logData(startTXpackets, startTXbytes, System.currentTimeMillis());
+                }
             }
         }
-        return null;
+        return applications;
     }
 }

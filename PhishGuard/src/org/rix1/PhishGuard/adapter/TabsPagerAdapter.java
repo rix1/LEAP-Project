@@ -5,7 +5,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import org.rix1.PhishGuard.fragment.AllAppsFragment;
 import org.rix1.PhishGuard.fragment.CurrentAppFragment;
-import org.rix1.PhishGuard.fragment.CustomListFragment;
 import org.rix1.PhishGuard.fragment.WatchedAppsFragment;
 
 /**
@@ -23,7 +22,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter{
 
         switch (i){
             case 0:
-                return new CurrentAppFragment();
+                return new AllAppsFragment();
             case 1:
                 return new WatchedAppsFragment();
             case 2:

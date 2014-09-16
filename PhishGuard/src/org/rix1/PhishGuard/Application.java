@@ -13,36 +13,65 @@ public class Application implements Comparable<Application>{
 
     private static int globalCounter = 0;
 
+    private int uid;
     private String packageName;
     private String applicationName;
-    private final long startPackets;
+
+    private long startTXPackets;
+    private long startTXBytes;
 
     private long packetsSent;
-    private long latestPackageStamp;
-
-    private boolean notificationFlag;
-    private boolean DEBUG_FLAG = false;
+    private long latestTimeStamp;
     private Drawable icon;
-
+    private boolean isTracked;
     private Stack<Datalog> datalog;
 
+    private boolean DEBUG_FLAG = false;
 
-    public Application(String packageName, String applicationName, long startPackets, long startBytes, Drawable icon){
+
+    public long getStartTXPackets() {
+        return startTXPackets;
+    }
+
+    public long getStartTXBytes() {
+        return startTXBytes;
+    }
+
+    public Application(int uid, String packageName, String applicationName, long startPackets, long startBytes, Drawable icon){
+        this.uid = uid;
         this.packageName = packageName;
         this.applicationName = applicationName;
 
         packetsSent = 0;
-        this.startPackets = startPackets;
+        this.startTXPackets = startPackets;
+        this.startTXBytes = startBytes;
+
 
         this.icon = icon;
-        notificationFlag = false;
+        isTracked = false;
 
         datalog = new Stack<Datalog>();
         globalCounter++;
 
         updateLatestPackageStamp();
-        logData(startPackets, startBytes, latestPackageStamp);
+
+        logData(startPackets, startBytes, latestTimeStamp);
     }
+
+    public void updateLatestPackageStamp(){
+        this.latestTimeStamp = System.currentTimeMillis();
+    }
+
+    public void setLatestTimeStamp(long timestamp){
+        this.latestTimeStamp = timestamp;
+    }
+
+    public void update(long packet, long bytes, long timeStamp){
+        this.startTXBytes = bytes;
+        this.startTXPackets = packet;
+        this.latestTimeStamp = timeStamp;
+    }
+
 
 
     /**
@@ -52,36 +81,27 @@ public class Application implements Comparable<Application>{
      * @param timeStamp
      * @return True if new data has been recorded. This will be used to send notifications.
      */
-    public boolean logData(long packet, long bytes, long timeStamp){
-        if(!datalog.empty()){
+    public boolean logData(long packet, long bytes, long timeStamp) {
+        if (!datalog.empty()) {
             Datalog prevLog = datalog.peek();
-            if(prevLog.getByteSinceBoot() < bytes){ // Indicates that packets have been sent
+            if (prevLog.getByteSinceBoot() < bytes) { // Indicates that packets have been sent
                 datalog.push(new Datalog(packet, bytes, timeStamp));
                 return true;
             } else return false;
-        }else datalog.add(new Datalog(packet, bytes, timeStamp));
+        } else datalog.add(new Datalog(packet, bytes, timeStamp));
         return true;
     }
 
-    /*
-    public long getTimeStamp(){
-        return System.currentTimeMillis() / 1000L;
+    public void setTracked(boolean tracked) {
+        this.isTracked = tracked;
     }
 
-    public int getRandomCount(){
-        if(DEBUG_FLAG){
-            return 0;
-        }
-        return new Random().nextInt(99);
-    }
-    */
-
-    public void setNotificationFlag(boolean notificationFlag) {
-        this.notificationFlag = notificationFlag;
+    public boolean isTracked(){
+        return isTracked;
     }
 
-    public boolean shouldWarn(){
-        return notificationFlag;
+    public int getUid() {
+        return uid;
     }
 
     public static int getGlobalCounter() {
@@ -97,16 +117,14 @@ public class Application implements Comparable<Application>{
     }
 
     public long getLatestStamp() {
-        return latestPackageStamp;
+        return latestTimeStamp;
     }
 
-    public void updateLatestPackageStamp(){
-        this.latestPackageStamp = System.currentTimeMillis() / 1000L;
-    }
 
     public void setPacketsSent(long packetsSent){
         this.packetsSent = packetsSent;
     }
+
     public long getPacketsSent(){
         return packetsSent;
     }
@@ -129,8 +147,8 @@ public class Application implements Comparable<Application>{
                 "packageName='" + packageName + '\'' +
                 ", applicationName='" + applicationName + '\'' +
                 ", packetsSent=" + packetsSent +
-                ", latestPackageStamp=" + latestPackageStamp +
-                ", notificationFlag=" + notificationFlag +
+                ", latestTimeStamp=" + latestTimeStamp +
+                ", isTracked=" + isTracked +
                 ", DEBUG_FLAG=" + DEBUG_FLAG +
                 '}';
     }

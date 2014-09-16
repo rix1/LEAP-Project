@@ -29,17 +29,19 @@ import java.util.List;
 public class AllAppsFragment extends ListFragment {
 
 
-    private PackageManager pm = null;
-    private List<ApplicationInfo> trackedApplications = null;
-    private List<ApplicationInfo> allApplications = null;
-    private ApplicationAdapter listAdapter = null;
-    private ArrayList<Application> outNetworkApps;
-    private Application currentApplication;
-    private NetworkService networkService;
-    private Context context;
+    protected  PackageManager pm = null;
+    protected  List<ApplicationInfo> allApplications = null;
+    protected  ApplicationAdapter listAdapter = null;
 
-    private Switch menuSwitch;
-    private boolean showAllApps;
+    protected  static ArrayList<Application> listRXapps;
+
+    protected  Application currentApplication;
+    protected  NetworkService networkService;
+    protected  Context context;
+    protected  Switch menuSwitch;
+    protected  boolean showAllApps;
+
+    protected  boolean firstRun = true;
 
 
 
@@ -48,13 +50,13 @@ public class AllAppsFragment extends ListFragment {
 
         View rootView = inflater.inflate(R.layout.fragment_app_list, container, false);
         pm = context.getPackageManager();
-        new LoadApplications().execute();
-        outNetworkApps = new ArrayList<Application>();
-        networkService = new NetworkService();
+        listRXapps = new ArrayList<Application>();
+        networkService = new NetworkService(pm);
 
+        new LoadApplications().execute();
+            firstRun = false;
         return rootView;
     }
-
 
     private void displayInfoDialog(){
         String message = getString(R.string.android_security);
@@ -82,7 +84,7 @@ public class AllAppsFragment extends ListFragment {
 
         builder.setPositiveButton("Yes, notify me", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                currentApplication.setNotificationFlag(true);
+                currentApplication.setTracked(true);
                 Log.d("APP_LIST", currentApplication.toString());
                 listAdapter.notifyDataSetChanged();
                 dialog.cancel();
@@ -90,7 +92,7 @@ public class AllAppsFragment extends ListFragment {
         });
         builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                currentApplication.setNotificationFlag(false);
+                currentApplication.setTracked(false);
                 Log.d("APP_LIST", currentApplication.toString());
                 listAdapter.notifyDataSetChanged();
                 dialog.cancel();
@@ -103,7 +105,9 @@ public class AllAppsFragment extends ListFragment {
     public void onListItemClick(ListView listview, View view, int position, long id){
         super.onListItemClick(listview, view, position, id);
 
-        setCurrentApplication(outNetworkApps.get(position));
+        setCurrentApplication(listRXapps.get(position));
+        currentApplication = listRXapps.get(0);                      // Set a current app.
+
         displayApplicationDialog();
 
     }
@@ -113,7 +117,9 @@ public class AllAppsFragment extends ListFragment {
     }
 
 
-
+    public void buildList(){
+        listAdapter = new ApplicationAdapter(context, R.layout.app_list_row, listRXapps);
+    }
 
         /**
          * Private class to start and handle the loading of
@@ -129,9 +135,12 @@ public class AllAppsFragment extends ListFragment {
             protected Void doInBackground(Void... voids) {
 
                 allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
-                outNetworkApps = networkService.getTraffic(allApplications, pm);
-                outNetworkApps = networkService.getTraffic(allApplications, pm); // Probably need an update method...
-                listAdapter = new ApplicationAdapter(context, R.layout.app_list_row, outNetworkApps);
+
+                if(firstRun) {
+                    listRXapps = networkService.init(allApplications); // Get all apps having outgoing traffic
+                }else listRXapps = networkService.update(listRXapps);
+
+                buildList();
                 return null;
             }
 
@@ -159,7 +168,6 @@ public class AllAppsFragment extends ListFragment {
                 }
                 return applicationList;
             }
-
 
             protected void onCancelled() {
                 super.onCancelled();
