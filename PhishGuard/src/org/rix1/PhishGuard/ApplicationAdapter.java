@@ -2,13 +2,13 @@ package org.rix1.PhishGuard;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import org.rix1.PhishGuard.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -64,7 +64,7 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             String countString = (count >1000) ? Integer.toString(count/1000) + "k":Integer.toString(count);
 
             updateCount.setText(countString);
-            lastUpdate.setText(utils.formattedDate(app.getLatestStamp()));
+            lastUpdate.setText(Utils.formattedDate(app.getLatestStamp()));
             appIcon.setImageDrawable(app.getIcon());
 
             if(app.shouldWarn()){

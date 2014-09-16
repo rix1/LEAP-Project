@@ -41,7 +41,6 @@ public class NetworkService {
         int uid;
         this.packageManager = packageManager;
 
-
         if(appInfo != null) {
             for (ApplicationInfo appI : appInfo) {
                 uid = appI.uid;

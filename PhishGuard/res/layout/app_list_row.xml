@@ -36,18 +36,6 @@
         />
 
     <TextView
-        android:id="@+id/application_last_update_date"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/sample_date"
-        android:textStyle="italic"
-        android:textColor="@color/slightlylightgrey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/count_description"
-        android:layout_alignLeft="@id/application_name"
-        />
-
-    <TextView
         android:id="@+id/application_last_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -62,7 +50,28 @@
         android:layout_alignLeft="@id/application_name"
         />
 
+    <TextView
+        android:id="@+id/application_last_update_date"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/sample_date"
+        android:textStyle="italic"
+        android:textColor="@color/slightlylightgrey"
+        android:layout_marginTop="-5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/application_last_update"
+        android:layout_alignLeft="@id/application_name"
+        />
 
+
+
+
+<RelativeLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_centerVertical="true"
+    android:paddingBottom="5dp"
+    >
 
     <TextView
         android:id="@+id/application_update_count"
@@ -90,6 +99,8 @@
         android:layout_marginRight="20dp"
         android:layout_alignParentRight="true"
         />
+
+</RelativeLayout>
 
 
 
