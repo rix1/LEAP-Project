@@ -95,6 +95,7 @@ public class ApplicationListActivity extends ListActivity{
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setTracked(true);
                 Log.d("APP_LIST", currentApplication.toString());
+                Collections.sort(outNetworkApps);
                 listAdapter.notifyDataSetChanged();
                 dialog.cancel();
             }
@@ -102,7 +103,7 @@ public class ApplicationListActivity extends ListActivity{
         builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setTracked(false);
-                Log.d("APP_LIST", currentApplication.toString());
+                Collections.sort(outNetworkApps);
                 listAdapter.notifyDataSetChanged();
                 dialog.cancel();
             }

@@ -143,7 +143,7 @@ public class Application implements Comparable<Application>{
 
     public int compareTo(Application otherApp) {
 
-        int i = Boolean.valueOf(this.isTracked()).compareTo(otherApp.isTracked());
+        int i = Boolean.valueOf(otherApp.isTracked()).compareTo(this.isTracked());
         if(i != 0) return i;
         i = (int)(this.startTXBytes - otherApp.startTXBytes);
         if(i != 0) return i;
@@ -151,5 +151,20 @@ public class Application implements Comparable<Application>{
         return this.applicationName.toLowerCase().compareTo(otherApp.applicationName.toLowerCase());
     }
 
-
+    @Override
+    public String toString() {
+        return "Application{" +
+                "uid=" + uid +
+                ", packageName='" + packageName + '\'' +
+                ", applicationName='" + applicationName + '\'' +
+                ", startTXPackets=" + startTXPackets +
+                ", startTXBytes=" + startTXBytes +
+                ", packetsSent=" + packetsSent +
+                ", latestTimeStamp=" + latestTimeStamp +
+                ", icon=" + icon +
+                ", isTracked=" + isTracked +
+                ", datalog=" + datalog +
+                ", DEBUG_FLAG=" + DEBUG_FLAG +
+                '}';
+    }
 }

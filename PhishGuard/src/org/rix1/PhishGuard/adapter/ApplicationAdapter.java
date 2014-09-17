@@ -54,6 +54,7 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
 
         if (app != null) {
             int count = (int) app.getStartTXBytes();
+            String countString = "";
 
             TextView appName = (TextView) view.findViewById(R.id.application_name);
             TextView updateCount = (TextView) view.findViewById(R.id.application_update_count);
@@ -61,7 +62,17 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             ImageView appIcon = (ImageView) view.findViewById(R.id.app_icon);
 
             appName.setText(app.getApplicationName());
-            String countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
+            countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
+
+            if(count > 10000){
+                countString = Integer.toString(count / 10000) + "k";
+                if(count > 100000){
+                    countString = Integer.toString(count / 100000) + "k";
+                    if(count > 1000000){
+                        countString = Integer.toString(count / 1000000) + "M";
+                    }
+                }
+            }
 
             updateCount.setText(countString);
             lastUpdate.setText(Utils.formattedDate(app.getLatestStamp()));
