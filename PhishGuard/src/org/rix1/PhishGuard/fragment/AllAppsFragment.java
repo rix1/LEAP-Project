@@ -1,6 +1,7 @@
 package org.rix1.PhishGuard.fragment;
 
 import android.app.AlertDialog;
+import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -26,42 +27,34 @@ import java.util.List;
  * Description:
  */
 
-public class AllAppsFragment extends ListFragment {
+public class AllAppsFragment extends ListActivity {
 
 
-    protected  PackageManager pm = null;
-    protected  List<ApplicationInfo> allApplications = null;
-    protected  ApplicationAdapter listAdapter = null;
-
-    protected  static ArrayList<Application> listRXapps;
-
-    protected  Application currentApplication;
-    protected  NetworkService networkService;
-    protected  Context context;
-    protected  Switch menuSwitch;
-    protected  boolean showAllApps;
-
-    protected  boolean firstRun = true;
+    private  PackageManager pm = null;
+    private  List<ApplicationInfo> allApplications = null;
+    private  ApplicationAdapter listAdapter = null;
+    private  ArrayList<Application> listRXapps;
+    private  Application currentApplication;
+    private  NetworkService networkService;
+    private  Switch menuSwitch;
+    private  boolean showAllApps;
+    private  boolean firstRun = true;
 
 
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        context = getActivity();
-
-        View rootView = inflater.inflate(R.layout.fragment_app_list, container, false);
-        pm = context.getPackageManager();
+    public void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_app_list);
+        pm = getPackageManager();
         listRXapps = new ArrayList<Application>();
         networkService = new NetworkService(pm);
-
         new LoadApplications().execute();
-            firstRun = false;
-        return rootView;
     }
 
     private void displayInfoDialog(){
         String message = getString(R.string.android_security);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Android Security");
         builder.setMessage(message);
         builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
@@ -78,7 +71,7 @@ public class AllAppsFragment extends ListFragment {
     private void displayApplicationDialog(){
         String message = getString(R.string.application_desc_start) + " " + currentApplication.getPacketsSent() + " " +getString(R.string.application_desc_end);
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(currentApplication.getApplicationName());
         builder.setMessage(message);
 
@@ -118,7 +111,9 @@ public class AllAppsFragment extends ListFragment {
 
 
     public void buildList(){
-        listAdapter = new ApplicationAdapter(context, R.layout.app_list_row, listRXapps);
+        listRXapps = networkService.update(listRXapps);
+        Log.d("APP_ALL", "Apps in list" + listRXapps.size());
+        listAdapter = new ApplicationAdapter(this, R.layout.app_list_row, listRXapps);
     }
 
         /**
@@ -135,11 +130,7 @@ public class AllAppsFragment extends ListFragment {
             protected Void doInBackground(Void... voids) {
 
                 allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
-
-                if(firstRun) {
-                    listRXapps = networkService.init(allApplications); // Get all apps having outgoing traffic
-                }else listRXapps = networkService.update(listRXapps);
-
+                listRXapps = networkService.init(allApplications); // Get all apps having outgoing traffic
                 buildList();
                 return null;
             }
@@ -180,7 +171,7 @@ public class AllAppsFragment extends ListFragment {
             }
 
             protected void onPreExecute() {
-                progress = ProgressDialog.show(context, null, "Loading application info...");
+                progress = ProgressDialog.show(AllAppsFragment.this, null, "Loading application info...");
                 super.onPreExecute();
             }
 

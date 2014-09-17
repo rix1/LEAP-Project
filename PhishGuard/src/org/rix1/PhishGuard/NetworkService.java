@@ -44,7 +44,7 @@ public class NetworkService {
                 startTXbytes = TrafficStats.getUidTxBytes(uid);
 
                 if(startTXbytes > 0){
-                    returnList.add(new Application(uid, appI.packageName, appI.loadLabel(packageManager).toString(), startTXpackets, startTXbytes, appI.loadIcon(packageManager)));
+                    returnList.add(new Application(uid, appI.packageName, appI.loadLabel(pm).toString(), startTXpackets, startTXbytes, appI.loadIcon(pm)));
                 }
             }
         }

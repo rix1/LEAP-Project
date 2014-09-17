@@ -10,8 +10,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
+ * @deprecated
  * Created by rikardeide on 16/09/14.
  */
+
+
 public class TabListener<T extends Fragment> implements ActionBar.TabListener {
 
     private Fragment mFragment;

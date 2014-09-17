@@ -3,14 +3,13 @@ package org.rix1.PhishGuard.adapter;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import org.rix1.PhishGuard.fragment.AllAppsFragment;
-import org.rix1.PhishGuard.fragment.CurrentAppFragment;
-import org.rix1.PhishGuard.fragment.WatchedAppsFragment;
 
 /**
+ * @deprecated
  * Created by Rikard Eide on 16/09/14.
  * Description:
  */
+
 public class TabsPagerAdapter extends FragmentPagerAdapter{
 
     public TabsPagerAdapter(FragmentManager fm){
@@ -22,11 +21,14 @@ public class TabsPagerAdapter extends FragmentPagerAdapter{
 
         switch (i){
             case 0:
-                return new AllAppsFragment();
+//                return new AllAppsFragment();
+                break;
             case 1:
-                return new WatchedAppsFragment();
+//                return new WatchedAppsFragment();
+                break;
             case 2:
-                return new CurrentAppFragment();
+//                return new CurrentAppFragment();
+                break;
         }
         return null;
     }

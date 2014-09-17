@@ -22,8 +22,14 @@
 
         <activity
             android:name=".fragment.AllAppsFragment"
+            android:theme="@android:style/Theme.Holo.Light"
             android:label="@string/app_name">
             </activity>
+
+        <activity android:name=".ApplicationListActivity"
+                  android:theme="@android:style/Theme.Holo.Light"
+                  android:label="@string/app_name"
+            />
 
         <service android:name=".NetworkService"/>
     </application>

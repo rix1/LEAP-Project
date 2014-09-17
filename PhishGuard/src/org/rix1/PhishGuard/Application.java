@@ -55,7 +55,7 @@ public class Application implements Comparable<Application>{
 
         updateLatestPackageStamp();
 
-        logData(startPackets, startBytes, latestTimeStamp);
+//        logData(startPackets, startBytes, latestTimeStamp);
     }
 
     public void updateLatestPackageStamp(){
@@ -120,11 +120,19 @@ public class Application implements Comparable<Application>{
         return latestTimeStamp;
     }
 
+    /**
+     * @deprecated
+     * @param packetsSent
+     */
 
     public void setPacketsSent(long packetsSent){
         this.packetsSent = packetsSent;
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     public long getPacketsSent(){
         return packetsSent;
     }
@@ -135,21 +143,13 @@ public class Application implements Comparable<Application>{
 
     public int compareTo(Application otherApp) {
 
-        int i = (int)(this.packetsSent - otherApp.packetsSent);
+        int i = Boolean.valueOf(this.isTracked()).compareTo(otherApp.isTracked());
+        if(i != 0) return i;
+        i = (int)(this.startTXBytes - otherApp.startTXBytes);
         if(i != 0) return i;
 
         return this.applicationName.toLowerCase().compareTo(otherApp.applicationName.toLowerCase());
     }
 
-    @Override
-    public String toString() {
-        return "Application{" +
-                "packageName='" + packageName + '\'' +
-                ", applicationName='" + applicationName + '\'' +
-                ", packetsSent=" + packetsSent +
-                ", latestTimeStamp=" + latestTimeStamp +
-                ", isTracked=" + isTracked +
-                ", DEBUG_FLAG=" + DEBUG_FLAG +
-                '}';
-    }
+
 }

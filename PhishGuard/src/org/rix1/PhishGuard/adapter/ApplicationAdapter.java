@@ -2,7 +2,6 @@ package org.rix1.PhishGuard.adapter;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,18 +24,18 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
 
     private Context context;
     private PackageManager packageManager;
-    private ArrayList<Application> trackedApplications;
+    private ArrayList<Application> outTXapps;
 
-    public ApplicationAdapter(Context context, int textViewResourceID, ArrayList<Application> trackedApplications){
-        super(context, textViewResourceID, trackedApplications);
+    public ApplicationAdapter(Context context, int textViewResourceID, ArrayList<Application> outTXApplications){
+        super(context, textViewResourceID, outTXApplications);
         this.context = context;
         packageManager = context.getPackageManager();
-        this.trackedApplications = trackedApplications;
+        this.outTXapps = outTXApplications;
 
     }
 
     public int getCount(){
-        return ((trackedApplications != null) ? trackedApplications.size(): 0);
+        return ((outTXapps != null) ? outTXapps.size(): 0);
     }
 
     public long getItemId(int position){
@@ -51,21 +50,17 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             view = layoutInflater.inflate(R.layout.app_list_row, null);
         }
 
-        Application app = trackedApplications.get(position);
+        Application app = outTXapps.get(position);
 
         if (app != null) {
-            int count = (int) app.getPacketsSent();
+            int count = (int) app.getStartTXBytes();
 
             TextView appName = (TextView) view.findViewById(R.id.application_name);
             TextView updateCount = (TextView) view.findViewById(R.id.application_update_count);
             TextView lastUpdate = (TextView) view.findViewById(R.id.application_last_update_date);
             ImageView appIcon = (ImageView) view.findViewById(R.id.app_icon);
 
-            Application temp = getApplication(app.getPackageName());
-
             appName.setText(app.getApplicationName());
-
-
             String countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
 
             updateCount.setText(countString);
@@ -83,16 +78,4 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
         }
         return view;
     }
-
-
-    // Warning! Might return null
-    public Application getApplication(String packageName){
-        for(Application app:trackedApplications){
-            if(app.getPackageName().equals(packageName)){
-                return app;
-            }
-        }
-        return null;
-    }
-
 }
