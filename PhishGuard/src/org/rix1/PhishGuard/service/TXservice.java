@@ -45,8 +45,6 @@ public class TXservice extends Service {
         alarm.SetAlarm(TXservice.this);
         globalVar.setServiceRunning(true);
 
-
-
         return super.onStartCommand(intent, flags, START_STICKY);
     }
 

@@ -4,12 +4,10 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -17,11 +15,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Switch;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import org.rix1.PhishGuard.adapter.ApplicationAdapter;
+import org.rix1.PhishGuard.utils.Utils;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -41,8 +37,7 @@ public class ApplicationListActivity extends ListActivity{
     private ArrayList<Application> tempListTXapps;
 
 
-    private final Type listOfApplicationObject = new TypeToken<List<Application>>(){}.getType();
-    private final String APPLICATION_LIST = "ApplicationList";
+
     private Application currentApplication;
     private NetworkService networkService;
 
@@ -53,8 +48,9 @@ public class ApplicationListActivity extends ListActivity{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d("APP_LIST", "onCreate called");
+
         outNetworkApps = new ArrayList<Application>();
-        setContentView(R.layout.fragment_app_list);
+        setContentView(R.layout.activity_app_list);
         pm = getPackageManager();
         networkService = new NetworkService(pm);
 
@@ -148,42 +144,31 @@ public class ApplicationListActivity extends ListActivity{
         Log.d("APP_LIST", "onRestoreInstanceState called");
 
         super.onRestoreInstanceState(savedInstanceState);
+/*
         Log.d("APP_LIST", "Restoring state....");
         Gson gson = new Gson();
-        if(savedInstanceState.containsKey(APPLICATION_LIST)){
-            String json = savedInstanceState.getString(APPLICATION_LIST, "");
+        if(savedInstanceState.containsKey(APPLIST_NAME)){
+            String json = savedInstanceState.getString(APPLIST_NAME, "");
             Log.d("APP_LIST", "Restoring state...JSON:   " + json);
             outNetworkApps = gson.fromJson(json, listOfApplicationObject);
-        }else Log.d("APP_LIST", "Key '" + APPLICATION_LIST +"' not found");
-        outNetworkApps = new ArrayList<Application>();
+        }else Log.d("APP_LIST", "Key '" + APPLIST_NAME +"' not found");
+*/
+//        outNetworkApps = new ArrayList<Application>();
     }
 
+    /**
+     * Store the application state
+     */
     protected void onStop(){
         super.onStop();
         Log.d("APP_LIST", "onStop called");
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor prefsEditor = prefs.edit();
-        Gson gson = new Gson();
-        String json = gson.toJson(outNetworkApps, listOfApplicationObject);
-        Log.d("APP_LIST", "Data stored: " + json);
-
-        prefsEditor.putString(APPLICATION_LIST, json);
-        prefsEditor.commit();
+        Utils.storeApplicationState(getApplicationContext(), outNetworkApps);
     }
 
     protected  void onStart(){
         super.onStart();
         Log.d("APP_LIST", "onStart called");
-
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Gson gson = new Gson();
-        String json = prefs.getString(APPLICATION_LIST, "");
-        if(!json.equals("")){
-            outNetworkApps = gson.fromJson(json, listOfApplicationObject);
-            Log.d("APP_LIST", "Data REstored2: " + outNetworkApps.get(0).toString());
-            Log.d("APP_LIST", "Data REstored: " + json);
-        }else Log.d("APP_LIST", "JSON was empty");
-
+        outNetworkApps = Utils.getApplicationState(getApplicationContext());
     }
 
     protected void onPause(){
