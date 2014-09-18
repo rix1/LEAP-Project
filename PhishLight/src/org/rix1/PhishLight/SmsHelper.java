@@ -13,7 +13,7 @@ import android.util.Log;
 
 import java.util.Date;
 
-public class SmsHelper extends AsyncTask<String, Void, Boolean>{
+public class SmsHelper extends AsyncTask<Void, Void, Boolean>{
 	
 	private Context context;
 	private DataHelper dataHelper;
@@ -83,7 +83,7 @@ public class SmsHelper extends AsyncTask<String, Void, Boolean>{
 	}
 
 	@Override
-	protected Boolean doInBackground(String... params) {
+	protected Boolean doInBackground(Void... params) {
 		// TODO Auto-generated method stub
 		
 		

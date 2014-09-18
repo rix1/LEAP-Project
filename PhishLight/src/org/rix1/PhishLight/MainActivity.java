@@ -47,7 +47,7 @@ public class MainActivity extends Activity {
         
         smsHelper = new SmsHelper(this);
         // not sure if this should be here or not
-        smsHelper.postNewSms();
+        //smsHelper.execute(null);
 
         toggle.setOnClickListener(new View.OnClickListener() {
             @Override
