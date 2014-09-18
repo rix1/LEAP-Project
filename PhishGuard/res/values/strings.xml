@@ -15,4 +15,5 @@
         This includes reading or writing the user\'s private data (such as contacts or emails), reading or writing another application\'s
         files, performing network access, keeping the device awake, and so on.
     </string>
+    <string name="startstopservice">Start/stop service</string>
 </resources>

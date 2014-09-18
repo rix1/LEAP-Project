@@ -4,10 +4,12 @@ import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -15,8 +17,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.Switch;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import org.rix1.PhishGuard.adapter.ApplicationAdapter;
 
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +38,11 @@ public class ApplicationListActivity extends ListActivity{
     private ApplicationAdapter listAdapter = null;
 
     private ArrayList<Application> outNetworkApps;
+    private ArrayList<Application> tempListTXapps;
+
+
+    private final Type listOfApplicationObject = new TypeToken<List<Application>>(){}.getType();
+    private final String APPLICATION_LIST = "ApplicationList";
     private Application currentApplication;
     private NetworkService networkService;
 
@@ -42,11 +52,14 @@ public class ApplicationListActivity extends ListActivity{
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d("APP_LIST", "onCreate called");
+        outNetworkApps = new ArrayList<Application>();
         setContentView(R.layout.fragment_app_list);
         pm = getPackageManager();
-        new LoadApplications().execute();
-        outNetworkApps = new ArrayList<Application>();
         networkService = new NetworkService(pm);
+
+        initList();
+
     }
 
     public boolean onCreateOptionsMenu(Menu menu){
@@ -103,6 +116,7 @@ public class ApplicationListActivity extends ListActivity{
         builder.setNegativeButton("No Thanks!", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
                 currentApplication.setTracked(false);
+                Log.d("APP_LIST", currentApplication.toString());
                 Collections.sort(outNetworkApps);
                 listAdapter.notifyDataSetChanged();
                 dialog.cancel();
@@ -124,8 +138,90 @@ public class ApplicationListActivity extends ListActivity{
         this.currentApplication = application;
     }
 
-    public void gunnar(){
-        outNetworkApps = networkService.init(allApplications);
+    protected void onSaveInstanceState (Bundle outState){
+        Log.d("APP_LIST", "onSaveInstanceState called");
+
+        super.onSaveInstanceState(outState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        Log.d("APP_LIST", "onRestoreInstanceState called");
+
+        super.onRestoreInstanceState(savedInstanceState);
+        Log.d("APP_LIST", "Restoring state....");
+        Gson gson = new Gson();
+        if(savedInstanceState.containsKey(APPLICATION_LIST)){
+            String json = savedInstanceState.getString(APPLICATION_LIST, "");
+            Log.d("APP_LIST", "Restoring state...JSON:   " + json);
+            outNetworkApps = gson.fromJson(json, listOfApplicationObject);
+        }else Log.d("APP_LIST", "Key '" + APPLICATION_LIST +"' not found");
+        outNetworkApps = new ArrayList<Application>();
+    }
+
+    protected void onStop(){
+        super.onStop();
+        Log.d("APP_LIST", "onStop called");
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor prefsEditor = prefs.edit();
+        Gson gson = new Gson();
+        String json = gson.toJson(outNetworkApps, listOfApplicationObject);
+        Log.d("APP_LIST", "Data stored: " + json);
+
+        prefsEditor.putString(APPLICATION_LIST, json);
+        prefsEditor.commit();
+    }
+
+    protected  void onStart(){
+        super.onStart();
+        Log.d("APP_LIST", "onStart called");
+
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Gson gson = new Gson();
+        String json = prefs.getString(APPLICATION_LIST, "");
+        if(!json.equals("")){
+            outNetworkApps = gson.fromJson(json, listOfApplicationObject);
+            Log.d("APP_LIST", "Data REstored2: " + outNetworkApps.get(0).toString());
+            Log.d("APP_LIST", "Data REstored: " + json);
+        }else Log.d("APP_LIST", "JSON was empty");
+
+    }
+
+    protected void onPause(){
+        super.onPause();
+        Log.d("APP_LIST", "onPause called");
+
+    }
+
+    public void onResume(){
+        super.onResume();
+        Log.d("APP_LIST", "onResume called");
+
+    }
+
+    public void onRestart(){
+        super.onRestart();
+        Log.d("APP_LIST", "onRestart called");
+
+    }
+
+    public void initList(){
+        boolean shouldUpdate = false;
+        if(outNetworkApps != null)
+            shouldUpdate = true;
+        new LoadApplications().execute(shouldUpdate);
+
+    }
+
+    public void updateList(){
+        for (Application appA : tempListTXapps){
+            if(!outNetworkApps.contains(appA)){
+                Log.d("APP_LIST", "Adding app " + appA.getPackageName());
+                outNetworkApps.add(appA); // Add new objects
+            }
+        }
+    }
+
+    public void viewList(){
         Collections.sort(outNetworkApps);
         listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, outNetworkApps);
     }
@@ -136,15 +232,21 @@ public class ApplicationListActivity extends ListActivity{
      * so this is done in a Async Task to take resources off the main thread
      */
 
-    private class LoadApplications extends AsyncTask<Void, Void, Void> {
+    private class LoadApplications extends AsyncTask<Boolean, Void, Void> {
 
         private ProgressDialog progress = null;
 
         @Override
-        protected Void doInBackground(Void... voids) {
+        protected Void doInBackground(Boolean ... shouldUpdate) {
 
             allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
-            gunnar();
+
+            if(shouldUpdate[0]){
+                outNetworkApps = networkService.update(outNetworkApps, allApplications);
+            }else {
+                outNetworkApps = networkService.init(allApplications);
+            }
+            viewList();
             return null;
         }
 

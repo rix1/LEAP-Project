@@ -2,6 +2,8 @@ package org.rix1.PhishGuard.adapter;
 
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -61,7 +63,6 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             TextView lastUpdate = (TextView) view.findViewById(R.id.application_last_update_date);
             ImageView appIcon = (ImageView) view.findViewById(R.id.app_icon);
 
-            appName.setText(app.getApplicationName());
             countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
 
             if(count > 10000){
@@ -74,10 +75,17 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
                 }
             }
 
+            if(app.getDatalog().size() > 1){
+                Log.d("APP_ADAPTER", "Datalog size: " + app.getDatalog().size());
+                appName.setText(app.getApplicationName());
+                appName.setTextColor(context.getResources().getColor(R.color.green));
+            }else{
+                appName.setText(app.getApplicationName());
+                appName.setTextColor(context.getResources().getColor(R.color.darkgrey));
+            }
             updateCount.setText(countString);
             lastUpdate.setText(Utils.formattedDate(app.getLatestStamp()));
-            if(app.getIcon() != null)
-                appIcon.setImageDrawable(app.getIcon());
+            appIcon.setImageURI(Uri.parse(app.getIconUri()));
 
             if (app.isTracked()) {
                 updateCount.setTextColor(context.getResources().getColor(R.color.red));

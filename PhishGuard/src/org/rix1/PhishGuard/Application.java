@@ -1,6 +1,5 @@
 package org.rix1.PhishGuard;
 
-import android.graphics.drawable.Drawable;
 
 import java.util.Stack;
 
@@ -22,7 +21,7 @@ public class Application implements Comparable<Application>{
 
     private long packetsSent;
     private long latestTimeStamp;
-    private Drawable icon;
+    private String iconURI;
     private boolean isTracked;
     private Stack<Datalog> datalog;
 
@@ -37,7 +36,7 @@ public class Application implements Comparable<Application>{
         return startTXBytes;
     }
 
-    public Application(int uid, String packageName, String applicationName, long startPackets, long startBytes, Drawable icon){
+    public Application(int uid, String packageName, String applicationName, long startPackets, long startBytes, int iconResID){
         this.uid = uid;
         this.packageName = packageName;
         this.applicationName = applicationName;
@@ -46,8 +45,7 @@ public class Application implements Comparable<Application>{
         this.startTXPackets = startPackets;
         this.startTXBytes = startBytes;
 
-
-        this.icon = icon;
+        this.iconURI = "android.resource://" + packageName + "/" + iconResID;
         isTracked = false;
 
         datalog = new Stack<Datalog>();
@@ -55,7 +53,7 @@ public class Application implements Comparable<Application>{
 
         updateLatestPackageStamp();
 
-//        logData(startPackets, startBytes, latestTimeStamp);
+        logData(startPackets, startBytes, latestTimeStamp);
     }
 
     public void updateLatestPackageStamp(){
@@ -76,14 +74,16 @@ public class Application implements Comparable<Application>{
 
     /**
      * Check if we should update this dataobject
-     * @param packet
-     * @param bytes
-     * @param timeStamp
+     * @param
+     * @param
+     * @param
      * @return True if new data has been recorded. This will be used to send notifications.
      */
+
     public boolean logData(long packet, long bytes, long timeStamp) {
         if (!datalog.empty()) {
             Datalog prevLog = datalog.peek();
+            // I think this is redundant
             if (prevLog.getByteSinceBoot() < bytes) { // Indicates that packets have been sent
                 datalog.push(new Datalog(packet, bytes, timeStamp));
                 return true;
@@ -137,8 +137,13 @@ public class Application implements Comparable<Application>{
         return packetsSent;
     }
 
-    public Drawable getIcon(){
-        return icon;
+
+    public String getIconUri(){
+        return iconURI;
+    }
+
+    public Stack<Datalog> getDatalog() {
+        return datalog;
     }
 
     public int compareTo(Application otherApp) {
@@ -151,6 +156,8 @@ public class Application implements Comparable<Application>{
         return this.applicationName.toLowerCase().compareTo(otherApp.applicationName.toLowerCase());
     }
 
+
+
     @Override
     public String toString() {
         return "Application{" +
@@ -161,9 +168,8 @@ public class Application implements Comparable<Application>{
                 ", startTXBytes=" + startTXBytes +
                 ", packetsSent=" + packetsSent +
                 ", latestTimeStamp=" + latestTimeStamp +
-                ", icon=" + icon +
+                ", iconURI=" + iconURI +
                 ", isTracked=" + isTracked +
-                ", datalog=" + datalog +
                 ", DEBUG_FLAG=" + DEBUG_FLAG +
                 '}';
     }
