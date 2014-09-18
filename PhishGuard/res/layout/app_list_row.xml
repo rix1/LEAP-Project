@@ -22,7 +22,7 @@
 
     <TextView
         android:id="@+id/application_name"
-        android:layout_width="wrap_content"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
         android:textSize="25dp"
@@ -33,18 +33,6 @@
         android:layout_marginTop="10dp"
         android:layout_marginLeft="70dp"
 
-        />
-
-    <TextView
-        android:id="@+id/application_last_update_date"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/sample_date"
-        android:textStyle="italic"
-        android:textColor="@color/slightlylightgrey"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/count_description"
-        android:layout_alignLeft="@id/application_name"
         />
 
     <TextView
@@ -62,37 +50,53 @@
         android:layout_alignLeft="@id/application_name"
         />
 
-
-
     <TextView
-        android:id="@+id/application_update_count"
+        android:id="@+id/application_last_update_date"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/sample_date"
+        android:textStyle="italic"
+        android:textColor="@color/slightlylightgrey"
+        android:layout_marginTop="-5dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:text="88"
-        android:textSize="@android:dimen/app_icon_size"
-        android:textStyle="italic"
-        android:textColor="@color/darkgrey"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="15dp"
+        android:layout_below="@id/application_last_update"
+        android:layout_alignLeft="@id/application_name"
         />
 
-    <TextView
-        android:id="@+id/count_description"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/comment"
-        android:textStyle="italic"
-        android:textColor="@color/darkgrey"
-        android:layout_below="@id/application_update_count"
-        android:layout_marginTop="-10dp"
-        android:layout_marginRight="20dp"
-        android:layout_alignParentRight="true"
-        />
+        android:layout_centerVertical="true"
+        android:paddingBottom="5dp"
+        >
 
+        <TextView
+            android:id="@+id/application_update_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="88"
+            android:textSize="@android:dimen/app_icon_size"
+            android:textStyle="italic"
+            android:textColor="@color/darkgrey"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            />
 
+        <TextView
+            android:id="@+id/count_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:text="last 24h"
+            android:textStyle="italic"
+            android:textColor="@color/darkgrey"
+            android:layout_below="@id/application_update_count"
+            android:layout_marginTop="-10dp"
+            android:layout_marginRight="20dp"
+            android:layout_alignParentRight="true"
+            />
 
-
+    </RelativeLayout>
 
 </RelativeLayout>
