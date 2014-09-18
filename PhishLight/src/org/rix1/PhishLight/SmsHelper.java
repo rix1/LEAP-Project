@@ -84,7 +84,6 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
 //                        String otherName = getContactName(context, formatNumber(address));
                         String otherName = "Gunnar";
 
-                        @SuppressWarnings("deprecation")
                         String timestamp = cursor.getString(2);
                         String body = cursor.getString(3);
 

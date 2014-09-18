@@ -2,7 +2,6 @@ package org.rix1.PhishLight;
 
 import android.annotation.SuppressLint;
 
-import java.util.Date;
 import java.util.StringTokenizer;
 
 @SuppressLint("UseValueOf")
@@ -14,22 +13,22 @@ public class BankDetails {
 	private String transactionPlace;
 	private String transactionTime;
 	private String transactionContent; 
-	private Long accountNumber;	
+	private String accountNumber;
 	private String transactionDate;
-	private Double availableBalance;
-	private Double transactionAmount;
+	private String availableBalance;
+	private String transactionAmount;
 	
 	public BankDetails() {
 		this.bankName = "ANDROID_bank";
-		this.transactionAmount = 1234.89;
+		this.transactionAmount = "" + 1234.89;
 		this.accountHolderFullName = "ANDROID_account";
 		this.transactionType = "ANDROID_transaction";
 		this.transactionPlace = "ANDROID_place";
 		this.transactionContent = "ANDROID_content"; 
-		this.accountNumber = new Long("43" + "5987");
+		this.accountNumber = "..." + "5987";
 		this.transactionTime = "00000";
 		this.transactionDate = "";
-		this.availableBalance = 1234.56;
+		this.availableBalance = "" + 1234.56;
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -46,7 +45,7 @@ public class BankDetails {
 			this.bankName += "" + stringTK.nextToken();
 		}
 		
-		this.transactionAmount = Double.parseDouble( stringTK.nextToken().substring(1) );
+		this.transactionAmount = stringTK.nextToken().substring(1);
 		
 		this.transactionType = stringTK.nextToken();
 		
@@ -55,7 +54,7 @@ public class BankDetails {
 			stringTK.nextToken(); // ignore "from"
 			stringTK.nextToken(); // ignore "Acc".
 			
-			this.accountNumber = new Long("..." + stringTK.nextToken());
+			this.accountNumber = "..." + stringTK.nextToken();
 			
 			stringTK.nextToken(); // ignore "at"
 			
@@ -65,7 +64,7 @@ public class BankDetails {
 			
 			stringTK.nextToken(); // ignore "number"\
 			
-			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
+			this.availableBalance = stringTK.nextToken().substring(1);
 			
 			this.transactionDate = stringTK.nextToken();
 		}
@@ -74,7 +73,7 @@ public class BankDetails {
 			stringTK.nextToken(); // ignore "from"
 			stringTK.nextToken(); // ignore "Acc".
 			
-			this.accountNumber = new Long("..." + stringTK.nextToken());
+			this.accountNumber = "..." + stringTK.nextToken();
 			
 			stringTK.nextToken(); // ignore "at"
 			
@@ -86,7 +85,7 @@ public class BankDetails {
 			stringTK.nextToken(); // ignore "Acl."
 			stringTK.nextToken(); // ignore "Bal".
 			
-			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
+			this.availableBalance = stringTK.nextToken().substring(1);
 			
 			this.transactionDate = stringTK.nextToken();
 		}
@@ -95,7 +94,7 @@ public class BankDetails {
 			stringTK.nextToken(); // ignore "into"
 			stringTK.nextToken(); // ignore "Acc".
 			
-			this.accountNumber = new Long(stringTK.nextToken());
+			this.accountNumber = stringTK.nextToken();
 			
 			stringTK.nextToken(); // ignore "from"
 			
@@ -106,7 +105,7 @@ public class BankDetails {
 			stringTK.nextToken(); // ignore "Acl."
 			stringTK.nextToken(); // ignore "Bal".
 			
-			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
+			this.availableBalance = stringTK.nextToken().substring(1);
 			
 			this.transactionDate = stringTK.nextToken();
 		}
@@ -115,12 +114,12 @@ public class BankDetails {
 			stringTK.nextToken(); // ignore "to"
 			stringTK.nextToken(); // ignore "Acc".
 			
-			this.accountNumber = new Long(stringTK.nextToken());
+			this.accountNumber = stringTK.nextToken();
 			
 			stringTK.nextToken(); // ignore "Acl."
 			stringTK.nextToken(); // ignore "Bal".
 			
-			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
+			this.availableBalance =stringTK.nextToken().substring(1);
 			
 			this.transactionDate = stringTK.nextToken();
 		}
@@ -135,7 +134,7 @@ public class BankDetails {
 		return this.bankName;
 	}
 	
-	public Double getTransactionAmount() {
+	public String getTransactionAmount() {
 		return this.transactionAmount;
 	}
 	
@@ -155,7 +154,7 @@ public class BankDetails {
 		return this.transactionContent;
 	} 
 	
-	public Long getAccountNumber() {
+	public String getAccountNumber() {
 		return this.accountNumber;
 	}
 	
@@ -167,7 +166,7 @@ public class BankDetails {
 		return this.transactionDate;
 	}
 	
-	public Double getAvailableBalance() {
+	public String getAvailableBalance() {
 		return this.availableBalance;
 	}
 	
