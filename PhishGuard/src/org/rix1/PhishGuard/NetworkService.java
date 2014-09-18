@@ -28,7 +28,6 @@ public class NetworkService {
     private boolean firstTimeFlag = true;
     private PackageManager pm;
 
-
     public NetworkService(PackageManager pm){
         this.pm = pm;
     }
@@ -47,7 +46,6 @@ public class NetworkService {
                 startTXbytes = TrafficStats.getUidTxBytes(uid);
 
                 if(startTXbytes > 0){
-                    Drawable d = appI.loadIcon(pm);
                     returnList.add(new Application(uid, appI.packageName, appI.loadLabel(pm).toString(), startTXpackets, startTXbytes, appI.icon));
                 }
             }

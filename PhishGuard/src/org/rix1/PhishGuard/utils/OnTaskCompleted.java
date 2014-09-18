@@ -1,6 +1,10 @@
 package org.rix1.PhishGuard.utils;
 
 import android.content.pm.ApplicationInfo;
+import org.rix1.PhishGuard.Application;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -10,5 +14,5 @@ import java.util.List;
 
 public interface OnTaskCompleted {
 
-    void onTaskCompleted(List<ApplicationInfo> applicationInfos);
+    void onTaskCompleted(ArrayList<Application> outNetworkApps);
 }

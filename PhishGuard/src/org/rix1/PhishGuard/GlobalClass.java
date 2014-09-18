@@ -14,10 +14,22 @@ import java.util.List;
 public class GlobalClass extends Application{
 
     private boolean isServiceRunning = false;
+    private boolean isFirstTime = true;
+
     public final Type APPLIST_TYPE = new TypeToken<List<org.rix1.PhishGuard.Application>>(){}.getType();
     public final String APPLIST_NAME = "ApplicationList";
+    public final String PREFS_NAME = "Preferences";
+    public final String FIRST_RUN = "FirstRunBool";
 
 
+
+    public boolean isFirstTime() {
+        return isFirstTime;
+    }
+
+    public void setFirstTime(boolean isFirstTime) {
+        this.isFirstTime = isFirstTime;
+    }
 
     public boolean isServiceRunning() {
         return isServiceRunning;

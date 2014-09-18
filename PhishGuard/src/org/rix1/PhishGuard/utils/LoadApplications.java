@@ -1,46 +1,64 @@
 package org.rix1.PhishGuard.utils;
 
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.os.AsyncTask;
+import android.util.Log;
+import org.rix1.PhishGuard.Application;
+import org.rix1.PhishGuard.NetworkService;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by Rikard Eide on 16/09/14.
- * Description:
  * Private class to start and handle the loading of
- * all applications into the list. This could take a long time,
+ * all applicaitons into the list. This could take a long time,
  * so this is done in a Async Task to take resources off the main thread
  */
 
-public class LoadApplications extends AsyncTask<Void, Void, List<ApplicationInfo>> {
+public class LoadApplications extends AsyncTask<Object, Void, Void> {
 
-    private ProgressDialog progress;
-    private List<ApplicationInfo> allApplications;
-    private OnTaskCompleted listener;
+    private ProgressDialog progress = null;
     private PackageManager pm;
     private Context context;
+    private List<ApplicationInfo> allApplications;
+    private NetworkService networkService;
+    private OnTaskCompleted listener;
+    private ArrayList<Application> outNetworkApps;
 
-    public LoadApplications(OnTaskCompleted listener, Context context, PackageManager pm){
+
+
+    public LoadApplications(PackageManager pm, Context context, OnTaskCompleted listener){
         this.listener = listener;
-        this.context = context;
         this.pm = pm;
-
-        progress = new ProgressDialog(context);
+        this.context = context;
         allApplications = new ArrayList<ApplicationInfo>();
-
+        networkService = new NetworkService(pm);
     }
 
+
+    /**
+     * Structure of args: [0]: ShouldUpdate [2]: List<Application>
+     * @param args
+     * @return
+     */
     @Override
-    protected List<ApplicationInfo> doInBackground(Void ... voids) {
+    protected Void doInBackground(Object ... args) {
+        Boolean shouldInit = (Boolean) args[0];
+        outNetworkApps = (ArrayList<Application>)args[1];
 
         allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
 
+        if(shouldInit){
+            outNetworkApps = networkService.init(allApplications);
+        }else {
+            outNetworkApps = networkService.update(outNetworkApps, allApplications);
+        }
         return null;
     }
+
 
     /**
      * This method receives a list containing meta data about all installed applications.
@@ -71,18 +89,21 @@ public class LoadApplications extends AsyncTask<Void, Void, List<ApplicationInfo
         super.onCancelled();
     }
 
+    protected void onPostExecute(Void result) {
+//        setListAdapter(listAdapter);
+        progress.dismiss();
+        Log.d("APP_ASYNC", "onPostExecute called...");
+        listener.onTaskCompleted(outNetworkApps);
+        super.onPostExecute(result);
+    }
+
     protected void onPreExecute() {
         progress = ProgressDialog.show(context, null, "Loading application info...");
         super.onPreExecute();
     }
 
-    protected void onPostExecute(List<ApplicationInfo> appI) {
-        progress.dismiss();
-        listener.onTaskCompleted(allApplications);
-    }
-
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
+
     }
 }
-

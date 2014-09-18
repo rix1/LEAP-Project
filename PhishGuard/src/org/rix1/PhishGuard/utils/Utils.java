@@ -73,8 +73,4 @@ public class Utils {
         prefsEditor.putString(globalVars.APPLIST_NAME, json);
         prefsEditor.commit();
     }
-
-
-
-
 }

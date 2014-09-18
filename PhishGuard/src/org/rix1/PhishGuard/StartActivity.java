@@ -2,6 +2,7 @@ package org.rix1.PhishGuard;
 
 import android.app.*;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -23,8 +24,7 @@ public class StartActivity extends Activity{
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        final GlobalClass globalVar = (GlobalClass) getApplicationContext();
+        final GlobalClass globalVars = (GlobalClass) getApplicationContext();
 
         showListbtn = (Button)findViewById(R.id.btn_showList);
         startServicebtn = (Button)findViewById(R.id.btn_startStopService);
@@ -42,18 +42,18 @@ public class StartActivity extends Activity{
         startServicebtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!globalVar.isServiceRunning()) {
+                if(!globalVars.isServiceRunning()) {
                     Intent i = new Intent(StartActivity.this, TXservice.class);
                     i.putExtra("name", "gunnar");
                     startService(i);
-                    globalVar.setServiceRunning(true);
+                    globalVars.setServiceRunning(true);
                     startServicebtn.setText("Stop service");
                     Log.d("APP_START", "Service started");
 
                 }else {
                     Intent i = new Intent(StartActivity.this, TXservice.class);
                     stopService(i);
-                    globalVar.setServiceRunning(false);
+                    globalVars.setServiceRunning(false);
                     startServicebtn.setText("Start service");
                     Log.d("APP_START", "Service stopped");
                 }
