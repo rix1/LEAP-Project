@@ -23,25 +23,30 @@ public class DataHelper {
 
     public DataHelper(Context c) {
         this.context = c;
-        String RekardString = "";
-        String rikard = "Rikards String";
     }
 
 
     // TODO: Change hard coded values with device information
-    public List getData() {
+    public List getData( SmsDetails sms) {
         nameValuePairs = new ArrayList<NameValuePair>(2);
-
+        
+        BankDetails bankSms = sms.getBankDetails();
+        
+        nameValuePairs.add( new BasicNameValuePair("bankName", bankSms.getBankName()) );
+        nameValuePairs.add( new BasicNameValuePair("bankName", bankSms.getTransactionAmount().toString()) );
         nameValuePairs.add(getFullname());
-        nameValuePairs.add(getEmail());
-        nameValuePairs.add(getLocation());
-        nameValuePairs.add(getTelephone());
-        nameValuePairs.add(new BasicNameValuePair("bank", "ANDROID_bank"));
-        nameValuePairs.add(new BasicNameValuePair("account", "ANDROID_account"));
-
+        nameValuePairs.add( new BasicNameValuePair("transactionType", bankSms.getTransactionType()) );
+        nameValuePairs.add( new BasicNameValuePair("availableBalance", bankSms.getAvailableBalance().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("transactionTime", bankSms.getTransactionTime()) );
+        nameValuePairs.add( new BasicNameValuePair("transactionDate", bankSms.getTransactionDate().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("transactionPlace", bankSms.getTransactionPlace()) );
+        nameValuePairs.add( new BasicNameValuePair("transactionContent", bankSms.getTransactionContent()) );
+        nameValuePairs.add( new BasicNameValuePair("smsTime", sms.getSmsDate().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("smsId", sms.getSmsId().toString()  ) );
+        nameValuePairs.add( new BasicNameValuePair("smsPhoneNumber", sms.getSmsPhoneNumber()) );
 
         // Just for testing purposes
-        printData();
+        //printData();
 
         return nameValuePairs;
     }
@@ -77,8 +82,8 @@ public class DataHelper {
             }
         }
         if(possibleFullname.equals(""))
-            return new BasicNameValuePair("fullname", "No name found");
-        else return new BasicNameValuePair("fullname", possibleFullname);
+            return new BasicNameValuePair("accountHolderfullName", "No name found");
+        else return new BasicNameValuePair("accountHolderfullName", possibleFullname);
     }
 
 

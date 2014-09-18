@@ -54,8 +54,6 @@ public class NetworkHelper extends AsyncTask<String, Void, Boolean> {
 // Format: 'username=USERNAME & email=EMAIL & fullname=FULLNAME & age=AGE & location=LOCATION & gender=GENDER'
         List<NameValuePair> nameValuePairs = data;
 
-
-
         try {
             httpPost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
         }catch (UnsupportedEncodingException e){
