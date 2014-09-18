@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 public class DataHelper {
 
     private Context context;
-    private List<NameValuePair> nameValuePairs;
+    private List<BasicNameValuePair> nameValuePairs;
 
     public DataHelper(Context c) {
         this.context = c;
@@ -28,7 +28,7 @@ public class DataHelper {
 
     // TODO: Change hard coded values with device information
     public List getData( SmsDetails sms) {
-        nameValuePairs = new ArrayList<NameValuePair>(2);
+        nameValuePairs = new ArrayList<BasicNameValuePair>(2);
         
         BankDetails bankSms = sms.getBankDetails();
         
@@ -71,7 +71,7 @@ public class DataHelper {
      * @return full name
      */
 
-    private NameValuePair getFullname(){
+    private BasicNameValuePair getFullname(){
         String facebookType = "com.sec.android.app.sns3.facebook";
         String possibleFullname = "";
 
@@ -108,42 +108,6 @@ public class DataHelper {
             return new BasicNameValuePair("email", "No name found");
         else return new BasicNameValuePair("email", possibleEmail);
     }
-
-
-    /**
-     * Gets the location or IP address?
-     * @return
-     */
-
-    private NameValuePair getLocation() {
-        // TODO: Get proper location
-        String mockLocation = "";
-        mockLocation = "43.81234123,-119.8374747";
-
-/* Rikard: I have not have success with this code yet. Don't remember whats wrong.
-    public String getAddress(){
-        try {
-            for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements();) {
-                NetworkInterface intf = en.nextElement();
-                for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements();) {
-                    InetAddress inetAddress = enumIpAddr.nextElement();
-                    if (!inetAddress.isLoopbackAddress()) {
-                        String ip = Formatter.formatIpAddress(inetAddress.hashCode());
-                        Log.d("APP: ", "***** IP="+ ip);
-                        return ip;
-                    }
-                }
-            }
-        } catch (SocketException ex) {
-            Log.d("APP: ", ex.toString());
-        }
-        return null;
-    }
-*/
-
-        return new BasicNameValuePair("location", mockLocation);
-    }
-
 
     /**
      * Currently gets the phone number from the Android AccountManager.

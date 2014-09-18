@@ -15,7 +15,7 @@ public class BankDetails {
 	private String transactionTime;
 	private String transactionContent; 
 	private Long accountNumber;	
-	private Date transactionDate;
+	private String transactionDate;
 	private Double availableBalance;
 	private Double transactionAmount;
 	
@@ -26,9 +26,9 @@ public class BankDetails {
 		this.transactionType = "ANDROID_transaction";
 		this.transactionPlace = "ANDROID_place";
 		this.transactionContent = "ANDROID_content"; 
-		this.accountNumber = new Long("..." + "5987");		
+		this.accountNumber = new Long("43" + "5987");
 		this.transactionTime = "00000";
-		this.transactionDate = new Date();
+		this.transactionDate = "";
 		this.availableBalance = 1234.56;
 	}
 	
@@ -43,7 +43,7 @@ public class BankDetails {
 		this.bankName = stringTK.nextToken();
 		
 		if (this.bankName.equalsIgnoreCase("Standard")) { 
-			this.bankName += " " + stringTK.nextToken();
+			this.bankName += "" + stringTK.nextToken();
 		}
 		
 		this.transactionAmount = Double.parseDouble( stringTK.nextToken().substring(1) );
@@ -67,7 +67,7 @@ public class BankDetails {
 			
 			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
 			
-			this.transactionDate = new Date( stringTK.nextToken() );			
+			this.transactionDate = stringTK.nextToken();
 		}
 		
 		else if( this.transactionType.equalsIgnoreCase("purchased") ) {
@@ -88,7 +88,7 @@ public class BankDetails {
 			
 			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
 			
-			this.transactionDate = new Date( stringTK.nextToken() );	
+			this.transactionDate = stringTK.nextToken();
 		}
 		
 		else if( this.transactionType.equalsIgnoreCase("deposited") ) {
@@ -108,7 +108,7 @@ public class BankDetails {
 			
 			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
 			
-			this.transactionDate = new Date( stringTK.nextToken() );	
+			this.transactionDate = stringTK.nextToken();
 		}
 		
 		else if( this.transactionType.equalsIgnoreCase("transferred") ) {
@@ -122,7 +122,7 @@ public class BankDetails {
 			
 			this.availableBalance = Double.parseDouble( stringTK.nextToken().substring(1) );
 			
-			this.transactionDate = new Date( stringTK.nextToken() );	
+			this.transactionDate = stringTK.nextToken();
 		}
 		
 	}
@@ -163,7 +163,7 @@ public class BankDetails {
 		return this.transactionTime;
 	}	
 	
-	public Date getTransactionDate() {
+	public String getTransactionDate() {
 		return this.transactionDate;
 	}
 	
@@ -182,7 +182,8 @@ public class BankDetails {
 				bankName.equalsIgnoreCase("Capitac")	||
 				bankName.equalsIgnoreCase("Standard")	||
 				bankName.equalsIgnoreCase("ABSA")		||
-				bankName.equalsIgnoreCase("Nedbank")) {
+				bankName.equalsIgnoreCase("Nedbank")
+                    ) {
 				return true;
 			}				
 		}

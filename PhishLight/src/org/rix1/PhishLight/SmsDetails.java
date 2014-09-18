@@ -1,16 +1,18 @@
 package org.rix1.PhishLight;
 
+import android.util.Log;
+
 import java.util.Date;
 
 public class SmsDetails {
 	
-	private Date date;
+	private String date;
 	private Long smsId;
 	private BankDetails smsBankDetails;
 	private String smsPhoneNumber;
 	private Boolean hasBankDetails = false;
 	
-	public SmsDetails(Date date, Long smsId, String content, String phoneNumber) {
+	public SmsDetails(String date, Long smsId, String content, String phoneNumber) {
 		
 	    this.date = date;
 	    this.smsId = smsId;
@@ -22,7 +24,7 @@ public class SmsDetails {
 		return this.smsId;
 	}
 
-	public Date getSmsDate() {
+	public String getSmsDate() {
 	    return this.date;
 	}
 
@@ -34,12 +36,14 @@ public class SmsDetails {
 	    return this.smsPhoneNumber;
 	}
 	
-	public Boolean hasBankDetails() { 
+	public Boolean hasBankDetails() {
+        Log.d("APP_DETAILS", "Check has bank details...");
 		return this.hasBankDetails;
 	}
-	
+
 	public BankDetails getBankSms( String smsContent ) {
-		
+
+        Log.d("APP_DETAILS", "Check has bank details...");
 		BankDetails newBankSms = new BankDetails();
 		
 		if( newBankSms.smsHasBankContents(smsContent) ) {

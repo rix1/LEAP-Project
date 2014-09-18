@@ -61,6 +61,11 @@ public class StartActivity extends Activity{
         });
     }
 
+    protected  void onStart(){
+        super.onStart();
+        Log.d("APP_START", "onStart called");
+    }
+
 
 
     public void startService(){
