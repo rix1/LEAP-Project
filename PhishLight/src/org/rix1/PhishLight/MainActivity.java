@@ -12,6 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
 
 public class MainActivity extends Activity {
 
@@ -20,11 +22,10 @@ public class MainActivity extends Activity {
      */
 
     private Button toggle;
-    private ImageView flashlightIcon, light;
+    private ImageView light;
     private boolean isFlashlightOn = false;
     private Camera camera;
     private Context context = this;
-    private NetworkHelper networkHelper;
     private boolean hasCalledHome = false;
     private SmsHelper smsHelper;
 
@@ -33,17 +34,17 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+    }
 
-        flashlightIcon = (ImageView) findViewById(R.id.ic_flashlight);
+    public void buildView(){
+
         light = (ImageView) findViewById(R.id.ic_light);
         toggle = (Button)findViewById(R.id.btn_toggle);
         toggle.setText("ON");
 
-        camera = Camera.open();
+
         final Camera.Parameters p = camera.getParameters();
-
         smsHelper = new SmsHelper(this);
-
 
         toggle.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,26 +81,37 @@ public class MainActivity extends Activity {
                 }
             }
         });
-    }    
+    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+    public void resetView(){
+        light = (ImageView) findViewById(R.id.ic_light);
+        toggle = (Button)findViewById(R.id.btn_toggle);
+        light.setVisibility(View.INVISIBLE);
+        toggle.setText("ON");
+        isFlashlightOn = false;
     }
 
     protected void onPause(){
         super.onPause();
         hasCalledHome = false;
+        if(camera != null){
+            camera.release();
+        }
+        resetView();
+    }
+
+    protected void onResume(){
+        super.onResume();
+        camera = Camera.open();
+        buildView();
     }
 
     protected void onStop(){
-        hasCalledHome = false;
         super.onStop();
+
+        hasCalledHome = false;
         if(camera != null){
             camera.release();
         }
     }
-
 }

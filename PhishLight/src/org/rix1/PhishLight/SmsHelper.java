@@ -9,12 +9,7 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.widget.Toast;
 import android.util.Log;
-import org.apache.http.NameValuePair;
-
-
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 public class SmsHelper extends AsyncTask<Void, Void, Void>{
 	
