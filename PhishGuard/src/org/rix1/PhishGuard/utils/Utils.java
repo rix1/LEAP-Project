@@ -3,6 +3,7 @@ package org.rix1.PhishGuard.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.Log;
 import com.google.gson.Gson;
 import org.rix1.PhishGuard.Application;
@@ -26,6 +27,7 @@ public class Utils {
      * @param timestamp Unix timestamp
      * @return A formatted string
      */
+
     public static String formattedDate(long timestamp) {
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(timestamp);
@@ -53,11 +55,25 @@ public class Utils {
         // TODO: Surround with Try/Catch?
         if(!json.equals("")){
             outNetworkApps = gson.fromJson(json, globalVars.APPLIST_TYPE);
-            Log.d("APP_LIST", "Data REstored2: " + outNetworkApps.get(0).toString());
-            Log.d("APP_LIST", "Data REstored: " + json);
-        }else Log.d("APP_LIST", "JSON was empty");
+//            Log.d("APP_UTIL", "Data REstored. First application: " + outNetworkApps.get(0).toString());
+//            Log.d("APP_UTIL", "Data REstored: " + json);
+        }else Log.d("APP_UTIL", "JSON was empty");
 
         return outNetworkApps;
+    }
+
+
+    // Helper method to store boolean config values
+    public static void storeBooleanApplicationState(Context context, String variableName, Boolean value){
+        GlobalClass globalVars = (GlobalClass) context;
+        SharedPreferences settings = context.getSharedPreferences(globalVars.PREFS_NAME, 0);
+        settings.edit().putBoolean(variableName, value).commit();
+    }
+
+    public static boolean getApplicationBool(Context context, String variableName){
+        GlobalClass globalVars = (GlobalClass) context;
+        SharedPreferences settings = context.getSharedPreferences(globalVars.PREFS_NAME, 0);
+        return settings.getBoolean(variableName, true);
     }
 
 
@@ -68,7 +84,7 @@ public class Utils {
 
         Gson gson = new Gson();
         String json = gson.toJson(outNetworkApps, globalVars.APPLIST_TYPE);
-        Log.d("APP_LIST", "Data stored: " + json);
+//        Log.d("APP_UTIL", "Data stored: " + json);
 
         prefsEditor.putString(globalVars.APPLIST_NAME, json);
         prefsEditor.commit();

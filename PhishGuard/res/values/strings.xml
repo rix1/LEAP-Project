@@ -16,4 +16,6 @@
         files, performing network access, keeping the device awake, and so on.
     </string>
     <string name="startstopservice">Start/stop service</string>
+    <string name="menu">Main Menu</string>
+    <string name="automonitor">Automatic monitoring</string>
 </resources>

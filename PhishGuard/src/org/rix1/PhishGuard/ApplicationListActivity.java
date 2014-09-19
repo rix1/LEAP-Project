@@ -13,13 +13,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import org.rix1.PhishGuard.adapter.ApplicationAdapter;
+import org.rix1.PhishGuard.service.Alarm;
 import org.rix1.PhishGuard.utils.LoadApplications;
 import org.rix1.PhishGuard.utils.OnTaskCompleted;
 import org.rix1.PhishGuard.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 
 /**
  * Created by Rikard Eide on 12/09/14.
@@ -32,6 +32,9 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
     private ApplicationAdapter listAdapter = null;
     private ArrayList<Application> outNetworkApps;
     private Application currentApplication;
+    private GlobalClass globalVars;
+    private Alarm alarm = new Alarm();
+
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -131,26 +134,48 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
         super.onRestoreInstanceState(savedInstanceState);
     }
 
+
+    /**
+     * Restore the application state
+     * To avoid race conditions with the application state
+     * in sharedPreferences, we turn off the monitoring
+     * when the application starts.
+     */
+
+    protected  void onStart(){
+        super.onStart();
+        globalVars = (GlobalClass) getApplicationContext();
+        globalVars.setListActivityRunning(true);
+        Log.d("APP_LIST", "onStart called");
+        initList();
+
+        alarm.CancelAlarm(this);
+        Log.d("APP_LIST", "Alarm cancelled");
+
+    }
+
+
     /**
      * Store the application state
+     * Means that the application (UI) is no longer showing
+     * and monitoring can begin again
      */
 
     protected void onStop(){
         super.onStop();
         Log.d("APP_LIST", "onStop called");
         Utils.storeApplicationState(getApplicationContext(), outNetworkApps);
+        globalVars.setListActivityRunning(false);
+        Log.d("APP_START", "onStop called. Start activity: " + globalVars.isStartActivityRunning());
+
+
+        if(!globalVars.isStartActivityRunning() && globalVars.isMonitoring()) {
+            Log.d("APP_LIST", " alarm set");
+            alarm.SetAlarm(this);
+        }
     }
 
 
-    /**
-     * Restore the application state
-     */
-
-    protected  void onStart(){
-        super.onStart();
-        Log.d("APP_LIST", "onStart called");
-        initList();
-    }
 
     protected void onPause(){
         super.onPause();
@@ -170,21 +195,20 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
     }
 
     private void initList(){
-        final GlobalClass globalVars = (GlobalClass) getApplicationContext();
-        SharedPreferences settings = getSharedPreferences(globalVars.PREFS_NAME, 0);
         LoadApplications loadApplications = new LoadApplications(pm, this, this);
         Object[] conditions = new Object[2];
         boolean shouldInit;
 
-        if(settings.getBoolean(globalVars.FIRST_RUN, true)){
+        // Check if this is the first time running the application
+        if(globalVars.isFirstTime()){
             Log.d("APP_LIST", "Initiating list...");
             shouldInit = true;
             conditions[0] = shouldInit;
             conditions[1] = outNetworkApps;
             loadApplications.execute(conditions);
 
-            globalVars.setFirstTime(false);
-            settings.edit().putBoolean(globalVars.FIRST_RUN, false).commit();
+            // Register that the list have been initialized.
+            globalVars.setFirstTime();
         }else{
             outNetworkApps = Utils.getApplicationState(getApplicationContext());
             viewList();

@@ -6,23 +6,60 @@
 
     >
 
+    <TextView
+        android:id="@+id/txt_heading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/menu"
+        android:fontFamily="sans-serif-light"
+        android:textSize="30dp"
+        android:textStyle="bold|italic"
+        android:textColor="@color/darkgrey"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="60dp"
+        />
+
     <Button
         android:id="@+id/btn_showList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/txt_heading"
         style="@android:style/Theme.Holo.Light"
         android:text="Show list"
+        android:layout_marginTop="20dp"
         />
 
     <Button
         android:id="@+id/btn_startStopService"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
         style="@android:style/Theme.Holo.Light"
         android:layout_below="@id/btn_showList"
         android:text="@string/startstopservice"
+        />
+
+    <TextView
+        android:id="@+id/txt_monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/automonitor"
+        android:layout_below="@id/btn_startStopService"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textSize="15dp"
+        android:textColor="@color/darkgrey"
+        android:fontFamily="sans-serif-light"
+        />
+
+    <Switch
+        android:id="@+id/switch_monitor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/txt_monitor"
+        android:layout_marginTop="5dp"
         />
 
 </RelativeLayout>

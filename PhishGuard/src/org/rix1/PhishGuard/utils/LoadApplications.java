@@ -9,6 +9,8 @@ import android.os.AsyncTask;
 import android.util.Log;
 import org.rix1.PhishGuard.Application;
 import org.rix1.PhishGuard.NetworkService;
+import org.rix1.PhishGuard.service.TXservice;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,6 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
     private OnTaskCompleted listener;
     private ArrayList<Application> outNetworkApps;
 
-
-
     public LoadApplications(PackageManager pm, Context context, OnTaskCompleted listener){
         this.listener = listener;
         this.pm = pm;
@@ -37,7 +37,6 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
         allApplications = new ArrayList<ApplicationInfo>();
         networkService = new NetworkService(pm);
     }
-
 
     /**
      * Structure of args: [0]: ShouldUpdate [2]: List<Application>
@@ -90,15 +89,16 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void result) {
-//        setListAdapter(listAdapter);
-        progress.dismiss();
+        if(!(listener instanceof TXservice))
+            progress.dismiss();
         Log.d("APP_ASYNC", "onPostExecute called...");
         listener.onTaskCompleted(outNetworkApps);
         super.onPostExecute(result);
     }
 
     protected void onPreExecute() {
-        progress = ProgressDialog.show(context, null, "Loading application info...");
+        if(!(listener instanceof TXservice))
+            progress = ProgressDialog.show(context, null, "Loading application info...");
         super.onPreExecute();
     }
 
