@@ -66,10 +66,13 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
 
             if(count > 10000){
-                countString = Integer.toString(count / 10000) + "k";
+                countString = Integer.toString(count / 1000) + "k";
                 if(count > 100000){
-                    countString = Integer.toString(count / 100000) + "k";
+                    countString = Integer.toString(count / 1000) + "k";
                     if(count > 1000000){
+                        countString = Integer.toString(count / 1000000) + "M";
+                    }
+                    if(count > 10000000){
                         countString = Integer.toString(count / 1000000) + "M";
                     }
                 }
