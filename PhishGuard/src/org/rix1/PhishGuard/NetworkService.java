@@ -3,11 +3,10 @@ package org.rix1.PhishGuard;
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.net.TrafficStats;
 import android.util.Log;
+import org.rix1.PhishGuard.service.TXservice;
 import org.rix1.PhishGuard.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,11 +31,15 @@ public class NetworkService {
         this.pm = pm;
     }
 
-    public ArrayList<Application> init(List<ApplicationInfo> appInfo){
 
+    /**
+     * Should return a list of all applications having outgoing communications
+     * @param appInfo
+     * @return A list of all applications having outgoing communications
+     */
+
+    public ArrayList<Application> init(List<ApplicationInfo> appInfo){
         ArrayList<Application> returnList = new ArrayList<Application>();
-        // Should return a list of all applicaitons
-        // having outoing communications
 
         int uid;
         if(appInfo != null){
@@ -53,10 +56,13 @@ public class NetworkService {
         return returnList; // Should now contain all applications having sent more than one packet  since boot.
     }
 
-    public ArrayList<Application> update(ArrayList<Application> applications, List<ApplicationInfo> appI){
-        // Should return an updated list containting updated information.
 
-        // TODO: Check if appI differs from the other list
+    /**
+     * Should return an updated list containing updated information.
+     */
+
+    public ArrayList<Application> update(ArrayList<Application> applications, List<ApplicationInfo> appI){
+
         ArrayList<Application> updatedList = new ArrayList<Application>();
         updatedList = init(appI);
 
@@ -65,16 +71,18 @@ public class NetworkService {
         int uid;
 
         for (Application app : applications){
+            app.addPropertyChangeListener(new TXservice());
+
             uid = app.getUid();
             startTXpackets = TrafficStats.getUidTxPackets(uid);
             startTXbytes = TrafficStats.getUidTxBytes(uid);
 
             if(startTXbytes > app.getStartTXBytes()){ // This means the traffic has increased
-                app.update(startTXpackets, startTXbytes, System.currentTimeMillis());
                 if(app.isTracked()){
                     app.logData(startTXpackets, startTXbytes, System.currentTimeMillis());
                     Log.d("APP_NETWORK", "Should log data at this point ");
                 }
+                app.update(startTXpackets, startTXbytes, System.currentTimeMillis());
             }
         }
 

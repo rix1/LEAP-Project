@@ -45,14 +45,17 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
      */
     @Override
     protected Void doInBackground(Object ... args) {
-        Boolean shouldInit = (Boolean) args[0];
+        Boolean shouldInit = ((Boolean) args[0]).booleanValue();
+        Log.d("APP_ASYNC", "Should we initialize now? args[0]: " + args[0] + " shouldinit: " + shouldInit);
         outNetworkApps = (ArrayList<Application>)args[1];
 
         allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
 
         if(shouldInit){
+            Log.d("APP_ASYNC", "Init list: " + outNetworkApps.toString());
             outNetworkApps = networkService.init(allApplications);
         }else {
+            Log.d("APP_ASYNC", "Updating list: " + outNetworkApps.toString());
             outNetworkApps = networkService.update(outNetworkApps, allApplications);
         }
         return null;

@@ -1,6 +1,8 @@
 package org.rix1.PhishGuard;
 
 
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.Stack;
 
 /**
@@ -15,15 +17,16 @@ public class Application implements Comparable<Application>{
     private int uid;
     private String packageName;
     private String applicationName;
-
+    private String iconURI;
     private long startTXPackets;
     private long startTXBytes;
-
     private long packetsSent;
     private long latestTimeStamp;
-    private String iconURI;
     private boolean isTracked;
+
     private Stack<Datalog> datalog;
+    private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
+
 
     private boolean DEBUG_FLAG = false;
 
@@ -70,8 +73,6 @@ public class Application implements Comparable<Application>{
         this.latestTimeStamp = timeStamp;
     }
 
-
-
     /**
      * Check if we should update this dataobject
      * @param
@@ -81,14 +82,16 @@ public class Application implements Comparable<Application>{
      */
 
     public boolean logData(long packet, long bytes, long timeStamp) {
+
         if (!datalog.empty()) {
-            Datalog prevLog = datalog.peek();
-            // I think this is redundant
-            if (prevLog.getByteSinceBoot() < bytes) { // Indicates that packets have been sent
-                datalog.push(new Datalog(packet, bytes, timeStamp));
-                return true;
-            } else return false;
-        } else datalog.add(new Datalog(packet, bytes, timeStamp));
+            Datalog prevRecord = datalog.peek();
+            pcs.firePropertyChange("SentBytes", prevRecord.getByteSinceBoot(), bytes);
+            datalog.push(new Datalog(packet, bytes, timeStamp));
+            return true;
+        } else {
+            pcs.firePropertyChange("SentBytes", startTXBytes, bytes);
+            datalog.add(new Datalog(packet, bytes, timeStamp));
+        }
         return true;
     }
 
@@ -156,9 +159,12 @@ public class Application implements Comparable<Application>{
         return this.applicationName.toLowerCase().compareTo(otherApp.applicationName.toLowerCase());
     }
 
+    public void addPropertyChangeListener(PropertyChangeListener listener) {
+        pcs = new PropertyChangeSupport(this);
+        pcs.addPropertyChangeListener(listener);
+    }
 
-
-    @Override
+        @Override
     public String toString() {
         return "Application{" +
                 "uid=" + uid +

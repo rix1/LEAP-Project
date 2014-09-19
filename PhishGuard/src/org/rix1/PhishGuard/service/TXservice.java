@@ -11,6 +11,8 @@ import org.rix1.PhishGuard.utils.LoadApplications;
 import org.rix1.PhishGuard.utils.OnTaskCompleted;
 import org.rix1.PhishGuard.utils.Utils;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 /**
@@ -18,7 +20,7 @@ import java.util.ArrayList;
  * Desc:
  */
 
-public class TXservice extends Service implements OnTaskCompleted{
+public class TXservice extends Service implements OnTaskCompleted, PropertyChangeListener  {
 
     private Alarm alarm = new Alarm();
     private ArrayList<Application> outNetworkApps;
@@ -67,17 +69,23 @@ public class TXservice extends Service implements OnTaskCompleted{
 
     private void updateApplicationList(){
         LoadApplications asyncTask = new LoadApplications(getPackageManager(),this,this);
-        boolean firstTime = globalVar.isFirstTime(); // Copy variable in order to reduce calls to sharedPrefs.
-
+        Boolean firstTime = globalVar.isFirstTime(); // Copy variable in order to reduce calls to sharedPrefs.
+        Log.d("APP_SERVICE", "Is this first time? Should we initialize? " + firstTime);
         if(firstTime){
-            conditions[0] = firstTime;
+            conditions[0] = true;
             globalVar.setFirstTime();
         }else {
-            conditions[0] = !firstTime;
+            conditions[0] = false;
             outNetworkApps = Utils.getApplicationState(getApplicationContext());
         }
         conditions[1] = outNetworkApps;
         Log.d("APP_RX", "Service started and loaded state. outNetworkApps: " + outNetworkApps.size());
+
+        Log.d("APP_SERVICE", "Start Update ------------------------------------");
+        for (Application app: outNetworkApps){
+            Log.d("APP_SERVICE_SUPER", app.toString());
+        }
+
         asyncTask.execute(conditions);
     }
 
@@ -90,9 +98,22 @@ public class TXservice extends Service implements OnTaskCompleted{
     public void onTaskCompleted(ArrayList<Application> outNetworkApps) {
         Log.d("APP_SERVICE", "Task completed");
         this.outNetworkApps = outNetworkApps;
+        Log.d("APP_SERVICE", "Update ended ------------------------------------");
+        for (Application app: outNetworkApps){
+            Log.d("APP_SERVICE_SUPER", app.toString());
+        }
         storeUpdatedList();
         globalVar.setServiceRunning(false);
         stopSelf(); // Stop the service from running.
         Log.d("APP_SERVICE", "This should crash? Service should have stopped ?");
+    }
+
+    @Override
+    public void propertyChange(PropertyChangeEvent pcEvent) {
+        Log.d("APP_SERVICE", "Log change recorded! The " + pcEvent.getPropertyName() + " changed from " + pcEvent.getOldValue() + " to " + pcEvent.getNewValue());
+
+
+
+        //TODO: Send notification
     }
 }

@@ -37,6 +37,7 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
         if(!json.equals("")){
             Log.d("APP_SMSHELPER", "List loaded");
             foundMessages = gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
+            Log.d("APP_SMSHELPER", "Prev sms list loaded: " + foundMessages.size());
         }
     }
 
@@ -134,7 +135,7 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
         Gson gson = new Gson();
         String json = gson.toJson(foundMessages, new TypeToken<List<String>>(){}.getType());
         preferences.edit().putString("foundMessages", json).commit();
-        Log.d("APP_SMSHELPER", "List stored");
+            Log.d("APP_SMSHELPER", "Found sms list stored:\n"+json);
     }
 
     // This method attempts to get the contact name from a phone number.

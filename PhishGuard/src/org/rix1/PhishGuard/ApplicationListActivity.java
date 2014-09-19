@@ -83,6 +83,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
     private void displayApplicationDialog(){
         String message = getString(R.string.application_desc_start) + " " + currentApplication.getStartTXBytes() + " " +getString(R.string.application_desc_end);
+        Log.d("APP_LIST", currentApplication.toString());
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(currentApplication.getApplicationName());

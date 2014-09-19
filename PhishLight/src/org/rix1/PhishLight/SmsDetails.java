@@ -2,7 +2,9 @@ package org.rix1.PhishLight;
 
 import android.util.Log;
 
-import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class SmsDetails {
 	
@@ -14,12 +16,19 @@ public class SmsDetails {
 	
 	public SmsDetails(String date, Long smsId, String content, String phoneNumber) {
 		
-	    this.date = date;
+	    this.date = convertFormat(date);
 	    this.smsId = smsId;
 	    this.smsBankDetails = getBankSms(content);
 	    this.smsPhoneNumber = phoneNumber;
 	}
-	
+
+    private String convertFormat(String date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(Long.parseLong(date));
+        DateFormat dateFormat = new SimpleDateFormat("dd.MM.yyyy HH:mm:ss");
+        return dateFormat.format(cal.getTime());
+    }
+
 	public Long getSmsId() {
 		return this.smsId;
 	}
