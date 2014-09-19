@@ -39,6 +39,7 @@ public class TXservice extends Service implements OnTaskCompleted{
     public void onDestroy(){
         super.onDestroy();
         final GlobalClass globalVar = (GlobalClass) getApplicationContext();
+
         globalVar.setServiceRunning(false);
         Toast.makeText(this, "onDestroy: Alarm canceled...", Toast.LENGTH_SHORT).show();
 
@@ -75,12 +76,17 @@ public class TXservice extends Service implements OnTaskCompleted{
 
     private void updateApplicationList(){
         LoadApplications asyncTask = new LoadApplications(getPackageManager(),this,this);
+        boolean firstTime = globalVar.isFirstTime(); // Copy variable in order to reduce calls to sharedPrefs.
 
-        outNetworkApps = Utils.getApplicationState(getApplicationContext());
-        Log.d("APP_RX", "Service started and loaded state. outNetworkApps: " + outNetworkApps.size());
-
-        conditions[0] = true; // Because we only want to update, this should always be true
+        if(firstTime){
+            conditions[0] = firstTime;
+            globalVar.setFirstTime();
+        }else {
+            conditions[0] = !firstTime;
+            outNetworkApps = Utils.getApplicationState(getApplicationContext());
+        }
         conditions[1] = outNetworkApps;
+        Log.d("APP_RX", "Service started and loaded state. outNetworkApps: " + outNetworkApps.size());
         asyncTask.execute(conditions);
     }
 
