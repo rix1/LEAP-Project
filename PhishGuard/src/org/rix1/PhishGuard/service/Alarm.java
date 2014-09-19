@@ -7,10 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
-import org.rix1.PhishGuard.ApplicationListActivity;
-import org.rix1.PhishGuard.GlobalClass;
-import org.rix1.PhishGuard.StartActivity;
 
 /**
  * Created by rikardeide on 18/09/14.
@@ -33,10 +29,8 @@ public class Alarm extends BroadcastReceiver {
         wakeLock.acquire();
 
         // Start service from here
-        // TODO: Start service
         Intent serviceIntent = new Intent(context, TXservice.class);
         context.startService(serviceIntent);
-        Toast.makeText(context, "Alarm!!!", Toast.LENGTH_SHORT).show();
         Log.d("APP_ALARM", "Alarm fired. Instances: " + instances);
 
         wakeLock.release();

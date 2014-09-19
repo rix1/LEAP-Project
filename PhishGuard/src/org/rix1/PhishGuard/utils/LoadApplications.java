@@ -104,6 +104,5 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
 
     protected void onProgressUpdate(Void... values) {
         super.onProgressUpdate(values);
-
     }
 }

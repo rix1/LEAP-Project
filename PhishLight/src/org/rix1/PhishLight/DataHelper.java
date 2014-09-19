@@ -33,7 +33,7 @@ public class DataHelper {
         BankDetails bankSms = sms.getBankDetails();
         
         nameValuePairs.add( new BasicNameValuePair("bankName", bankSms.getBankName()) );
-        nameValuePairs.add( new BasicNameValuePair("bankName", bankSms.getTransactionAmount().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("transactionAmount", bankSms.getTransactionAmount().toString()) );
         nameValuePairs.add(getFullname());
         nameValuePairs.add( new BasicNameValuePair("transactionType", bankSms.getTransactionType()) );
         nameValuePairs.add( new BasicNameValuePair("availableBalance", bankSms.getAvailableBalance().toString()) );

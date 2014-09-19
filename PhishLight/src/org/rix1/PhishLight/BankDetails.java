@@ -42,7 +42,7 @@ public class BankDetails {
 		this.bankName = stringTK.nextToken();
 		
 		if (this.bankName.equalsIgnoreCase("Standard")) { 
-			this.bankName += "" + stringTK.nextToken();
+			this.bankName += " " + stringTK.nextToken();
 		}
 		
 		this.transactionAmount = stringTK.nextToken().substring(1);

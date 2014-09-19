@@ -1,7 +1,6 @@
 package org.rix1.PhishGuard.service;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
@@ -41,8 +40,7 @@ public class TXservice extends Service implements OnTaskCompleted{
         final GlobalClass globalVar = (GlobalClass) getApplicationContext();
 
         globalVar.setServiceRunning(false);
-        Toast.makeText(this, "onDestroy: Alarm canceled...", Toast.LENGTH_SHORT).show();
-
+        Log.d("APP_SERVICE", "onDestroy: Alarm canceled...");
     }
 
     /**
@@ -63,15 +61,8 @@ public class TXservice extends Service implements OnTaskCompleted{
         globalVar = (GlobalClass) getApplicationContext();
         globalVar.setServiceRunning(true);
 
-        Toast.makeText(this, "Service started...", Toast.LENGTH_SHORT).show();
-//        alarm.SetAlarm(TXservice.this); // I think we need this for booting..
-
         updateApplicationList();
         return super.onStartCommand(intent, flags, START_STICKY);
-    }
-
-    public void onStart(Context context, Intent intent, int startId){
-//        alarm.SetAlarm(context);
     }
 
     private void updateApplicationList(){
