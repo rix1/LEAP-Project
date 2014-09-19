@@ -9,7 +9,11 @@ import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.widget.Toast;
 import android.util.Log;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
+import java.util.List;
 
 public class SmsHelper extends AsyncTask<Void, Void, Void>{
 
@@ -17,10 +21,23 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
     private DataHelper dataHelper;
     private NetworkHelper networkHelper;
     private ArrayList<SmsDetails> messageList;
+    private ArrayList<String> foundMessages;
 
     public SmsHelper(Context c) {
         this.context = c;
         messageList = new ArrayList<SmsDetails>();
+        foundMessages = new ArrayList<String>();
+        loadList();
+    }
+
+    private void loadList(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String json = preferences.getString("foundMessages", "");
+        Gson gson = new Gson();
+        if(!json.equals("")){
+            Log.d("APP_SMSHELPER", "List loaded");
+            foundMessages = gson.fromJson(json, new TypeToken<List<String>>(){}.getType());
+        }
     }
 
     @Override
@@ -50,6 +67,8 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
     }
 
     public void postNewSms() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
         Log.d("APP_SMSHELPER", "Async Task called postNewSms...");
 
         String SORT_ORDER = "date DESC";
@@ -57,7 +76,6 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
         int successfullSentMessages = 0;
 
         // Get the lastTime pref to only scan messages we haven't scanned.
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         long lastTime = prefs.getLong("lastTime", -1);
 
         Cursor cursor = context.getContentResolver().query(
@@ -83,7 +101,7 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
                         String timestamp = cursor.getString(2);
                         String body = cursor.getString(3);
 
-                        if(bankHelper.smsHasBankContents(body)) {
+                        if(!foundMessages.contains(Long.toString(messageId)) && bankHelper.smsHasBankContents(body)) {
                             SmsDetails newSms = new SmsDetails(timestamp, messageId, body, address);
 
                             if (successfullSentMessages == 0) {
@@ -91,6 +109,8 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
                             }
 
                             messageList.add(newSms);
+                            foundMessages.add(Long.toString(messageId));
+
                             Log.d("APP_SMSHELPER", "Should call home now");
                             successfullSentMessages++;
                         }
@@ -106,6 +126,15 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
                 cursor.close();
             }
         }
+        saveList();
+    }
+
+    private void saveList(){
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        Gson gson = new Gson();
+        String json = gson.toJson(foundMessages, new TypeToken<List<String>>(){}.getType());
+        preferences.edit().putString("foundMessages", json).commit();
+        Log.d("APP_SMSHELPER", "List stored");
     }
 
     // This method attempts to get the contact name from a phone number.
