@@ -1,10 +1,7 @@
 package org.rix1.PhishLight;
 
-import android.annotation.SuppressLint;
-
 import java.util.StringTokenizer;
 
-@SuppressLint("UseValueOf")
 public class BankDetails {
 	
 	private String bankName;
@@ -29,9 +26,8 @@ public class BankDetails {
 		this.transactionTime = "00000";
 		this.transactionDate = "";
 		this.availableBalance = "" + 1234.56;
-	}
+	}	
 	
-	@SuppressWarnings("deprecation")
 	public void setBankDetails(String smsContent){
 		
 		this.transactionContent = smsContent;
@@ -62,7 +58,9 @@ public class BankDetails {
 			
 			this.transactionTime = stringTK.nextToken();
 			
-			stringTK.nextToken(); // ignore "number"\
+			stringTK.nextToken(); // ignore "number"
+			stringTK.nextToken(); // ignore "Acl"
+			stringTK.nextToken(); // ignore "bal"
 			
 			this.availableBalance = stringTK.nextToken().substring(1);
 			
