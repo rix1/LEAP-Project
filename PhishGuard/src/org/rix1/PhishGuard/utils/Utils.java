@@ -1,14 +1,12 @@
 package org.rix1.PhishGuard.utils;
 
 import android.app.PendingIntent;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
@@ -57,11 +55,11 @@ public class Utils {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
         Gson gson = new Gson();
-        String json = prefs.getString(globalVars.APPLIST_NAME, "");
+        String json = prefs.getString(GlobalClass.APPLIST_NAME, "");
 
         // TODO: Surround with Try/Catch?
         if(!json.equals("")){
-            outNetworkApps = gson.fromJson(json, globalVars.APPLIST_TYPE);
+            outNetworkApps = gson.fromJson(json, GlobalClass.APPLIST_TYPE);
 //            Log.d("APP_UTIL", "Data REstored. First application: " + outNetworkApps.get(0).toString());
 //            Log.d("APP_UTIL", "Data REstored: " + json);
         }else Log.d("APP_UTIL", "JSON was empty");
@@ -73,13 +71,13 @@ public class Utils {
     // Helper method to store boolean config values
     public static void storeBooleanApplicationState(Context context, String variableName, Boolean value){
         GlobalClass globalVars = (GlobalClass) context;
-        SharedPreferences settings = context.getSharedPreferences(globalVars.PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(GlobalClass.PREFS_NAME, 0);
         settings.edit().putBoolean(variableName, value).commit();
     }
 
     public static boolean getApplicationBool(Context context, String variableName){
         GlobalClass globalVars = (GlobalClass) context;
-        SharedPreferences settings = context.getSharedPreferences(globalVars.PREFS_NAME, 0);
+        SharedPreferences settings = context.getSharedPreferences(GlobalClass.PREFS_NAME, 0);
         return settings.getBoolean(variableName, true);
     }
 
@@ -90,17 +88,17 @@ public class Utils {
         SharedPreferences.Editor prefsEditor = prefs.edit();
 
         Gson gson = new Gson();
-        String json = gson.toJson(outNetworkApps, globalVars.APPLIST_TYPE);
+        String json = gson.toJson(outNetworkApps, GlobalClass.APPLIST_TYPE);
 //        Log.d("APP_UTIL", "Data stored: " + json);
 
-        prefsEditor.putString(globalVars.APPLIST_NAME, json);
+        prefsEditor.putString(GlobalClass.APPLIST_NAME, json);
         prefsEditor.commit();
     }
 
 
     public static void sendNotification(PropertyChangeEvent pcEvent){
         long dxBytes = ((Long) pcEvent.getNewValue() - (Long) pcEvent.getOldValue());
-        int notificationID = 001;
+        int notificationID = 1;
         Intent viewIntent = new Intent(GlobalClass.getAppContext(), ApplicationListActivity.class);
         viewIntent.setAction(Intent.ACTION_MAIN);
         viewIntent.addCategory(Intent.CATEGORY_LAUNCHER);

@@ -23,11 +23,11 @@ import java.util.List;
 public class LoadApplications extends AsyncTask<Object, Void, Void> {
 
     private ProgressDialog progress = null;
-    private PackageManager pm;
-    private Context context;
+    private final PackageManager pm;
+    private final Context context;
     private List<ApplicationInfo> allApplications;
-    private NetworkService networkService;
-    private OnTaskCompleted listener;
+    private final NetworkService networkService;
+    private final OnTaskCompleted listener;
     private ArrayList<Application> outNetworkApps;
 
     public LoadApplications(PackageManager pm, Context context, OnTaskCompleted listener){

@@ -14,15 +14,9 @@ import org.rix1.PhishGuard.service.Alarm;
 
 public class StartActivity extends Activity{
 
-    /**
-     * Called when the activity is first created.
-     */
-
-    private Button showListbtn;
-    private Button aboutbtn;
     private Switch aSwitch;
     private GlobalClass globalVars;
-    private Alarm alarm = new Alarm();
+    private final Alarm alarm = new Alarm();
     private boolean monitor;
 
     @Override
@@ -32,8 +26,11 @@ public class StartActivity extends Activity{
         setContentView(R.layout.main);
         final GlobalClass globalVars = (GlobalClass) getApplicationContext();
 
-        showListbtn = (Button) findViewById(R.id.btn_showList);
-        aboutbtn = (Button) findViewById(R.id.btn_about);
+        /*
+      Called when the activity is first created.
+     */
+        Button showListbtn = (Button) findViewById(R.id.btn_showList);
+        Button aboutbtn = (Button) findViewById(R.id.btn_about);
         aSwitch = (Switch) findViewById(R.id.switch_monitor);
         aSwitch.setChecked(globalVars.isMonitoring());
 

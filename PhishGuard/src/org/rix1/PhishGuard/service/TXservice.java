@@ -1,12 +1,8 @@
 package org.rix1.PhishGuard.service;
 
-import android.app.PendingIntent;
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import org.rix1.PhishGuard.*;
 import org.rix1.PhishGuard.utils.LoadApplications;
@@ -25,7 +21,7 @@ import java.util.ArrayList;
 public class TXservice extends Service implements OnTaskCompleted, PropertyChangeListener  {
 
     private ArrayList<Application> outNetworkApps;
-    private Object[] conditions = new Object[2];
+    private final Object[] conditions = new Object[2];
     private GlobalClass globalVar;
 
     @Override

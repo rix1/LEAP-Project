@@ -12,7 +12,7 @@ import android.content.Intent;
 
 public class BootBroadcast extends BroadcastReceiver {
 
-    Alarm alarm = new Alarm();
+    private final Alarm alarm = new Alarm();
 
     @Override
     public void onReceive(Context context, Intent intent) {

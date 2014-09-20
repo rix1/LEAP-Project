@@ -14,23 +14,19 @@ public class Application implements Comparable<Application>{
 
     private static int globalCounter = 0;
 
-    private int uid;
-    private String packageName;
-    private String applicationName;
-    private String iconURI;
+    private final int uid;
+    private final String packageName;
+    private final String applicationName;
+    private final String iconURI;
     private long startTXPackets;
     private long startTXBytes;
     private long packetsSent;
-    private long dx;
     private long latestTimeStamp;
     private boolean isTracked;
     private boolean isUpdated;
 
-    private Stack<Datalog> datalog;
+    private final Stack<Datalog> datalog;
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
-
-
-    private boolean DEBUG_FLAG = false;
 
 
     public long getStartTXPackets() {
@@ -86,7 +82,7 @@ public class Application implements Comparable<Application>{
 
     public void logData(long packet, long bytes, long timeStamp) {
         if(datalog.size() > 0){
-            dx = bytes - datalog.peek().getPacketsSinceBoot();
+            long dx = bytes - datalog.peek().getPacketsSinceBoot();
         }
         isUpdated = true;
         if (!datalog.empty()) {
@@ -197,7 +193,6 @@ public class Application implements Comparable<Application>{
                 ", latestTimeStamp=" + latestTimeStamp +
                 ", iconURI=" + iconURI +
                 ", isTracked=" + isTracked +
-                ", DEBUG_FLAG=" + DEBUG_FLAG +
                 '}';
     }
 }

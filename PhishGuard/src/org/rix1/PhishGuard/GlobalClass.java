@@ -15,9 +15,6 @@ import java.util.List;
 
 public class GlobalClass extends Application{
 
-    private boolean isFirstTime;
-    private boolean isMonitoring;
-
     private static Context context;
 
     private boolean isServiceRunning = false;
@@ -25,13 +22,13 @@ public class GlobalClass extends Application{
     private boolean isStartActivityRunning = false;
     private boolean notificationFired = false;
 
-    public final Type APPLIST_TYPE = new TypeToken<List<org.rix1.PhishGuard.Application>>(){}.getType();
-    public final String APPLIST_NAME = "ApplicationList";
-    public final String PREFS_NAME = "Preferences";
-    public final String FIRST_RUN = "FirstRunBool";
-    public final String MONITOR = "Monitor";
+    public static final Type APPLIST_TYPE = new TypeToken<List<org.rix1.PhishGuard.Application>>(){}.getType();
+    public static final String APPLIST_NAME = "ApplicationList";
+    public static final String PREFS_NAME = "Preferences";
+    public static final String FIRST_RUN = "FirstRunBool";
+    public static final String MONITOR = "Monitor";
 
-    private long updateInterval;
+    public static long updateInterval = 1000*10;
 
     public void onCreate(){
         super.onCreate();
@@ -55,7 +52,7 @@ public class GlobalClass extends Application{
     }
 
     public void setUpdateInterval(long updateInterval) {
-        this.updateInterval = updateInterval;
+        GlobalClass.updateInterval = updateInterval;
     }
 
     public boolean isStartActivityRunning() {
@@ -79,7 +76,7 @@ public class GlobalClass extends Application{
     }
 
     public void setFirstTime() {
-        this.isFirstTime = false;
+        boolean isFirstTime = false;
         Utils.storeBooleanApplicationState(getApplicationContext(), FIRST_RUN, false);
     }
 
@@ -96,7 +93,7 @@ public class GlobalClass extends Application{
     }
 
     public void setMonitoring(boolean isMonitoring) {
-        this.isMonitoring = isMonitoring;
+        boolean isMonitoring1 = isMonitoring;
         Utils.storeBooleanApplicationState(getApplicationContext(), MONITOR, isMonitoring);
 
     }

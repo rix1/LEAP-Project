@@ -3,7 +3,6 @@ package org.rix1.PhishGuard.adapter;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,9 +24,9 @@ import java.util.ArrayList;
 
 public class ApplicationAdapter extends ArrayAdapter<Application>{
 
-    private Context context;
-    private PackageManager packageManager;
-    private ArrayList<Application> outTXapps;
+    private final Context context;
+    private final PackageManager packageManager;
+    private final ArrayList<Application> outTXapps;
 
     public ApplicationAdapter(Context context, int textViewResourceID, ArrayList<Application> outTXApplications){
         super(context, textViewResourceID, outTXApplications);

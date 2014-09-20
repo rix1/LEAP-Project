@@ -16,10 +16,6 @@ import org.rix1.PhishGuard.GlobalClass;
 
 public class Alarm extends BroadcastReceiver {
 
-    /**
-     * This is the interval in which the alarm, and the service will be run.
-     */
-    private final long INTERVAL = 1000*10;
     private static int instances = 0;
 
     @Override
@@ -41,7 +37,11 @@ public class Alarm extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Alarm.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, i, 0);
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), INTERVAL , pendingIntent);
+        /*
+      This is the interval in which the alarm, and the service will be run.
+     */
+        long INTERVAL = GlobalClass.updateInterval;
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), INTERVAL, pendingIntent);
     }
 
     public void CancelAlarm(Context context){

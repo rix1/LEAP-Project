@@ -3,12 +3,10 @@ package org.rix1.PhishGuard;
 import android.app.AlertDialog;
 import android.app.ListActivity;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import org.rix1.PhishGuard.adapter.ApplicationAdapter;
@@ -32,7 +30,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
     private ArrayList<Application> outNetworkApps;
     private Application currentApplication;
     private GlobalClass globalVars;
-    private Alarm alarm = new Alarm();
+    private final Alarm alarm = new Alarm();
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -130,6 +128,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void setCurrentApplication(Application application){
         this.currentApplication = application;
     }
@@ -228,6 +227,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
         }
     }
 
+    @SuppressWarnings("WeakerAccess")
     public void viewList(){
         Log.d("APP_LIST", "ViewList called...");
         Collections.sort(outNetworkApps);

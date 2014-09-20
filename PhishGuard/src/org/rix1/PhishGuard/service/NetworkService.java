@@ -26,7 +26,7 @@ public class NetworkService {
     private ArrayList<Application> outApplications;
     private PackageManager packageManager;
     private boolean firstTimeFlag = true;
-    private PackageManager pm;
+    private final PackageManager pm;
 
     public NetworkService(PackageManager pm){
         this.pm = pm;

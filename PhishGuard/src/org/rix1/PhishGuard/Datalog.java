@@ -9,9 +9,9 @@ package org.rix1.PhishGuard;
 public class Datalog {
 
 
-    private long packetsSinceBoot;
-    private long byteSinceBoot;
-    private long timeStamp;
+    private final long packetsSinceBoot;
+    private final long byteSinceBoot;
+    private final long timeStamp;
     private long dx;
 
     public Datalog(long packet, long bytes, long timeStamp){
