@@ -1,6 +1,7 @@
 package org.rix1.PhishGuard;
 
 import android.app.Application;
+import android.content.Context;
 import com.google.gson.reflect.TypeToken;
 import org.rix1.PhishGuard.utils.Utils;
 
@@ -17,15 +18,45 @@ public class GlobalClass extends Application{
     private boolean isFirstTime;
     private boolean isMonitoring;
 
+    private static Context context;
+
     private boolean isServiceRunning = false;
     private boolean isListActivityRunning = false;
     private boolean isStartActivityRunning = false;
+    private boolean notificationFired = false;
 
     public final Type APPLIST_TYPE = new TypeToken<List<org.rix1.PhishGuard.Application>>(){}.getType();
     public final String APPLIST_NAME = "ApplicationList";
     public final String PREFS_NAME = "Preferences";
     public final String FIRST_RUN = "FirstRunBool";
     public final String MONITOR = "Monitor";
+
+    private long updateInterval;
+
+    public void onCreate(){
+        super.onCreate();
+        GlobalClass.context = getApplicationContext();
+    }
+
+    public static Context getAppContext(){
+        return GlobalClass.context;
+    }
+
+    public boolean isNotificationFired() {
+        return notificationFired;
+    }
+
+    public void setNotificationFired(boolean notificationFired) {
+        this.notificationFired = notificationFired;
+    }
+
+    public long getUpdateInterval() {
+        return 1000*10;
+    }
+
+    public void setUpdateInterval(long updateInterval) {
+        this.updateInterval = updateInterval;
+    }
 
     public boolean isStartActivityRunning() {
         return isStartActivityRunning;

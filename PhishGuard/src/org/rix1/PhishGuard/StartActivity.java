@@ -94,5 +94,6 @@ public class StartActivity extends Activity{
             Log.d("APP_START", " alarm set");
             alarm.SetAlarm(this);
         }
+        finish();
     }
 }

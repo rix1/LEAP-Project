@@ -1,12 +1,14 @@
 package org.rix1.PhishGuard.service;
 
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
-import android.widget.Toast;
-import org.rix1.PhishGuard.Application;
-import org.rix1.PhishGuard.GlobalClass;
+import org.rix1.PhishGuard.*;
 import org.rix1.PhishGuard.utils.LoadApplications;
 import org.rix1.PhishGuard.utils.OnTaskCompleted;
 import org.rix1.PhishGuard.utils.Utils;
@@ -22,7 +24,6 @@ import java.util.ArrayList;
 
 public class TXservice extends Service implements OnTaskCompleted, PropertyChangeListener  {
 
-    private Alarm alarm = new Alarm();
     private ArrayList<Application> outNetworkApps;
     private Object[] conditions = new Object[2];
     private GlobalClass globalVar;
@@ -39,10 +40,9 @@ public class TXservice extends Service implements OnTaskCompleted, PropertyChang
 
     public void onDestroy(){
         super.onDestroy();
-        final GlobalClass globalVar = (GlobalClass) getApplicationContext();
 
         globalVar.setServiceRunning(false);
-        Log.d("APP_SERVICE", "onDestroy: Alarm canceled...");
+        Log.d("APP_SERVICE", "Destroying service...");
     }
 
     /**
@@ -79,12 +79,12 @@ public class TXservice extends Service implements OnTaskCompleted, PropertyChang
             outNetworkApps = Utils.getApplicationState(getApplicationContext());
         }
         conditions[1] = outNetworkApps;
-        Log.d("APP_RX", "Service started and loaded state. outNetworkApps: " + outNetworkApps.size());
+//        Log.d("APP_RX", "Service started and loaded state. outNetworkApps: " + outNetworkApps.size());
 
-        Log.d("APP_SERVICE", "Start Update ------------------------------------");
-        for (Application app: outNetworkApps){
-            Log.d("APP_SERVICE_SUPER", app.toString());
-        }
+//        Log.d("APP_SERVICE", "Start Update ------------------------------------");
+//        for (Application app: outNetworkApps){
+//            Log.d("APP_SERVICE_SUPER", app.toString());
+//        }
 
         asyncTask.execute(conditions);
     }
@@ -98,22 +98,20 @@ public class TXservice extends Service implements OnTaskCompleted, PropertyChang
     public void onTaskCompleted(ArrayList<Application> outNetworkApps) {
         Log.d("APP_SERVICE", "Task completed");
         this.outNetworkApps = outNetworkApps;
-        Log.d("APP_SERVICE", "Update ended ------------------------------------");
-        for (Application app: outNetworkApps){
-            Log.d("APP_SERVICE_SUPER", app.toString());
-        }
+//        Log.d("APP_SERVICE", "Update ended ------------------------------------");
+//        for (Application app: outNetworkApps){
+//            Log.d("APP_SERVICE_SUPER", app.toString());
+//        }
+
         storeUpdatedList();
         globalVar.setServiceRunning(false);
         stopSelf(); // Stop the service from running.
-        Log.d("APP_SERVICE", "This should crash? Service should have stopped ?");
+        Log.d("APP_SERVICE", "Stopping service now...");
     }
 
     @Override
     public void propertyChange(PropertyChangeEvent pcEvent) {
         Log.d("APP_SERVICE", "Log change recorded! The " + pcEvent.getPropertyName() + " changed from " + pcEvent.getOldValue() + " to " + pcEvent.getNewValue());
-
-
-
-        //TODO: Send notification
+        Utils.sendNotification(pcEvent);
     }
 }

@@ -85,11 +85,11 @@ public class Application implements Comparable<Application>{
 
         if (!datalog.empty()) {
             Datalog prevRecord = datalog.peek();
-            pcs.firePropertyChange("SentBytes", prevRecord.getByteSinceBoot(), bytes);
+            pcs.firePropertyChange(this.applicationName, prevRecord.getByteSinceBoot(), bytes);
             datalog.push(new Datalog(packet, bytes, timeStamp));
             return true;
         } else {
-            pcs.firePropertyChange("SentBytes", startTXBytes, bytes);
+            pcs.firePropertyChange(applicationName, startTXBytes, bytes);
             datalog.add(new Datalog(packet, bytes, timeStamp));
         }
         return true;

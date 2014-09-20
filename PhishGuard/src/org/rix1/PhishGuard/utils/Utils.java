@@ -1,14 +1,19 @@
 package org.rix1.PhishGuard.utils;
 
+import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.v4.app.NotificationCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.util.Log;
 import com.google.gson.Gson;
-import org.rix1.PhishGuard.Application;
-import org.rix1.PhishGuard.GlobalClass;
+import org.rix1.PhishGuard.*;
 
+import java.beans.PropertyChangeEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -89,4 +94,28 @@ public class Utils {
         prefsEditor.putString(globalVars.APPLIST_NAME, json);
         prefsEditor.commit();
     }
+
+
+    public static void sendNotification(PropertyChangeEvent pcEvent){
+        long dxBytes = ((Long) pcEvent.getNewValue() - (Long) pcEvent.getOldValue());
+        int notificationID = 001;
+        Intent viewIntent = new Intent(GlobalClass.getAppContext(), ApplicationListActivity.class);
+        viewIntent.setAction(Intent.ACTION_MAIN);
+        viewIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        viewIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_LAUNCHED_FROM_HISTORY);
+        PendingIntent viewPendingIntent = PendingIntent.getActivity(GlobalClass.getAppContext(), 0, viewIntent, 0);
+
+        String notificationText = pcEvent.getPropertyName() + " recently sent " + dxBytes + " bytes";
+
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(GlobalClass.getAppContext())
+                .setSmallIcon(R.drawable.ic_launcher)
+                .setContentTitle("Phishguard warning!")
+                .setContentText(notificationText)
+                .setContentIntent(viewPendingIntent);
+        NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(GlobalClass.getAppContext());
+
+        notificationManagerCompat.notify(notificationID, notificationBuilder.build());
+    }
+
+
 }

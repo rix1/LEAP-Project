@@ -174,6 +174,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
             Log.d("APP_LIST", " alarm set");
             alarm.SetAlarm(this);
         }
+        finish();
     }
 
 
