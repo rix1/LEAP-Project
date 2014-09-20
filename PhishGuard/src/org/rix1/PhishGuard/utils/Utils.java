@@ -5,6 +5,8 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
@@ -106,12 +108,14 @@ public class Utils {
         PendingIntent viewPendingIntent = PendingIntent.getActivity(GlobalClass.getAppContext(), 0, viewIntent, 0);
 
         String notificationText = pcEvent.getPropertyName() + " recently sent " + dxBytes + " bytes";
+        Uri alarmsound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(GlobalClass.getAppContext())
                 .setSmallIcon(R.drawable.ic_launcher)
                 .setContentTitle("Phishguard warning!")
                 .setContentText(notificationText)
-                .setContentIntent(viewPendingIntent);
+                .setContentIntent(viewPendingIntent)
+                .setSound(alarmsound);
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(GlobalClass.getAppContext());
 
         notificationManagerCompat.notify(notificationID, notificationBuilder.build());

@@ -7,11 +7,10 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
+import android.view.*;
+import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 import org.rix1.PhishGuard.adapter.ApplicationAdapter;
 import org.rix1.PhishGuard.service.Alarm;
 import org.rix1.PhishGuard.utils.LoadApplications;
@@ -52,7 +51,6 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
         return true;
     }
 
-    // Maybe remove this?
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch (item.getItemId()) {
@@ -65,10 +63,10 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
     }
 
     private void displayInfoDialog(){
-        String message = getString(R.string.android_security);
+        String message = getString(R.string.about_listview);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("Android Security");
+        builder.setTitle("How to track:");
         builder.setMessage(message);
         builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
             @Override
@@ -82,12 +80,24 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
 
     private void displayApplicationDialog(){
-        String message = getString(R.string.application_desc_start) + " " + currentApplication.getStartTXBytes() + " " +getString(R.string.application_desc_end);
+        String message = getString(R.string.application_desc_start) + " " + currentApplication.getStartTXBytes() + " bytes.";
+        message += "\n";
+        if(currentApplication.getDatalog().size() > 1){
+            message += "History:\n";
+            for (Datalog data : currentApplication.getDatalog()){
+                message += Utils.formattedDate(data.getTimeStamp()) + " - " + data.getDx() + " bytes\n";
+            }
+        }
+        message += getString(R.string.application_desc_end);
         Log.d("APP_LIST", currentApplication.toString());
+
+        TextView dialogMessage = new TextView(this);
+        dialogMessage.setText(message);
+        dialogMessage.setGravity(Gravity.CENTER_HORIZONTAL);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(currentApplication.getApplicationName());
-        builder.setMessage(message);
+        builder.setView(dialogMessage);
 
         builder.setPositiveButton("Yes, notify me", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -115,6 +125,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
         super.onListItemClick(listview, view, position, id);
 
         setCurrentApplication(outNetworkApps.get(position));
+
         displayApplicationDialog();
 
     }

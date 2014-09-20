@@ -21,8 +21,10 @@ public class Application implements Comparable<Application>{
     private long startTXPackets;
     private long startTXBytes;
     private long packetsSent;
+    private long dx;
     private long latestTimeStamp;
     private boolean isTracked;
+    private boolean isUpdated;
 
     private Stack<Datalog> datalog;
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
@@ -53,6 +55,7 @@ public class Application implements Comparable<Application>{
 
         datalog = new Stack<Datalog>();
         globalCounter++;
+        isUpdated = false;
 
         updateLatestPackageStamp();
 
@@ -81,18 +84,36 @@ public class Application implements Comparable<Application>{
      * @return True if new data has been recorded. This will be used to send notifications.
      */
 
-    public boolean logData(long packet, long bytes, long timeStamp) {
-
+    public void logData(long packet, long bytes, long timeStamp) {
+        if(datalog.size() > 0){
+            dx = bytes - datalog.peek().getPacketsSinceBoot();
+        }
+        isUpdated = true;
         if (!datalog.empty()) {
             Datalog prevRecord = datalog.peek();
             pcs.firePropertyChange(this.applicationName, prevRecord.getByteSinceBoot(), bytes);
             datalog.push(new Datalog(packet, bytes, timeStamp));
-            return true;
         } else {
             pcs.firePropertyChange(applicationName, startTXBytes, bytes);
             datalog.add(new Datalog(packet, bytes, timeStamp));
         }
-        return true;
+    }
+
+    public void reset(){
+        datalog.clear();
+        startTXBytes = 0;
+        startTXPackets = 0;
+        latestTimeStamp = 0;
+        isUpdated = false;
+
+    }
+
+    public boolean isUpdated() {
+        return isUpdated;
+    }
+
+    public void setIsUpdated(Boolean updateValue) {
+        this.isUpdated = updateValue;
     }
 
     public void setTracked(boolean tracked) {

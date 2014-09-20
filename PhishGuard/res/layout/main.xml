@@ -30,14 +30,16 @@
         android:layout_marginTop="20dp"
         />
 
+
     <Button
-        android:id="@+id/btn_startStopService"
+        android:id="@+id/btn_about"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         style="@android:style/Theme.Holo.Light"
         android:layout_below="@id/btn_showList"
-        android:text="@string/startstopservice"
+        android:text="@string/about_title"
+        android:layout_marginTop="10dp"
         />
 
     <TextView
@@ -45,7 +47,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/automonitor"
-        android:layout_below="@id/btn_startStopService"
+        android:layout_below="@id/btn_about"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textSize="15dp"
@@ -61,5 +63,7 @@
         android:layout_below="@id/txt_monitor"
         android:layout_marginTop="5dp"
         />
+
+
 
 </RelativeLayout>

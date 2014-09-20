@@ -1,8 +1,8 @@
 package org.rix1.PhishGuard;
 
 import android.app.*;
+import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,8 +10,6 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import org.rix1.PhishGuard.service.Alarm;
-import org.rix1.PhishGuard.service.TXservice;
-import org.rix1.PhishGuard.utils.Utils;
 
 
 public class StartActivity extends Activity{
@@ -21,7 +19,7 @@ public class StartActivity extends Activity{
      */
 
     private Button showListbtn;
-    private Button startServicebtn;
+    private Button aboutbtn;
     private Switch aSwitch;
     private GlobalClass globalVars;
     private Alarm alarm = new Alarm();
@@ -35,8 +33,7 @@ public class StartActivity extends Activity{
         final GlobalClass globalVars = (GlobalClass) getApplicationContext();
 
         showListbtn = (Button) findViewById(R.id.btn_showList);
-        startServicebtn = (Button) findViewById(R.id.btn_startStopService);
-        startServicebtn.setText("Stop service and alarm");
+        aboutbtn = (Button) findViewById(R.id.btn_about);
         aSwitch = (Switch) findViewById(R.id.switch_monitor);
         aSwitch.setChecked(globalVars.isMonitoring());
 
@@ -57,16 +54,27 @@ public class StartActivity extends Activity{
         });
 
 
-        startServicebtn.setOnClickListener(new View.OnClickListener() {
+        aboutbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 Intent i = new Intent(StartActivity.this, TXservice.class);
-                 stopService(i);
-                 globalVars.setServiceRunning(false);
-                 alarm.CancelAlarm(getApplicationContext());
-                 Log.d("APP_START", "Service stopped");
+                displayInfoDialog();
             }
         });
+    }
+
+    private void displayInfoDialog(){
+        String message = getString(R.string.android_security);
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Android Security");
+        builder.setMessage(message);
+        builder.setNeutralButton("Close", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.show();
     }
 
     protected  void onStart() {

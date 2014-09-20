@@ -2,7 +2,7 @@
 <resources>
     <color name="transparent">#00000000</color>
     <color name="white">#FFF</color>
-    <color name="whitegray">#F6F6F6</color>
+    <color name="whitegray">#ffebebeb</color>
     <color name="lightgrey">#B2B2B1</color>
     <color name="slightlylightgrey">#a0a09f</color>
     <color name="grey">#808080</color>
@@ -15,6 +15,7 @@
 
     <color name="green">#2ab081</color>
     <color name="red">#d94130</color>
+    <color name="lightred">#ffff9f95</color>
 
     <color name="actionbarfontcolor">#f2f2f2</color>
 </resources>

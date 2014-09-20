@@ -12,6 +12,7 @@ public class Datalog {
     private long packetsSinceBoot;
     private long byteSinceBoot;
     private long timeStamp;
+    private long dx;
 
     public Datalog(long packet, long bytes, long timeStamp){
         this.packetsSinceBoot = packet;
@@ -19,7 +20,7 @@ public class Datalog {
         this.timeStamp = timeStamp;
     }
 
-
+    public long getDx(){return dx;}
     public long getPacketsSinceBoot() {
         return packetsSinceBoot;
     }
@@ -30,5 +31,15 @@ public class Datalog {
 
     public long getTimeStamp() {
         return timeStamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Datalog{" +
+                "packetsSinceBoot=" + packetsSinceBoot +
+                ", byteSinceBoot=" + byteSinceBoot +
+                ", timeStamp=" + timeStamp +
+                ", dx=" + dx +
+                '}';
     }
 }

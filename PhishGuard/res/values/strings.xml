@@ -3,13 +3,18 @@
     <string name="app_name">PhishGuard</string>
     <string name="comment">times</string>
     <string name="hello_world">Hello world</string>
-    <string name="action_about">About</string>
-    <string name="about_title">Gunnar Har En Tittel</string>
+    <string name="about_listview">
+        This list contains all the applications that have had outgoing connections
+        since the device booted. Click on an application to start tracking it. If
+        the count to the right is red, the application have recently been updated.
+    </string>
+    <string name="about_title">About</string>
     <string name="sample_date">12.09.2014 14:13:12</string>
     <string name="prev_connection">Previous connection: </string>
     <string name="application_desc_start">This application has sent</string>
-    <string name="application_desc_end">bytes. Do you want to get notified next it happens?</string>
+    <string name="application_desc_end">Do you want to get notified next it happens?</string>
     <string name="android_security">
+        TODO: Change this!
         A central design point of the Android security architecture is that no application, by default,
         has permission to perform any operations that would adversely impact other applications, the operating system, or the user.
         This includes reading or writing the user\'s private data (such as contacts or emails), reading or writing another application\'s

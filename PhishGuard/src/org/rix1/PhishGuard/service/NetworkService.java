@@ -84,6 +84,9 @@ public class NetworkService {
                     Log.d("APP_NETWORK", "Should log data at this point ");
                 }
                 app.update(startTXpackets, startTXbytes, System.currentTimeMillis());
+            }else if(startTXbytes < app.getStartTXBytes()){ // This means the device have been rebooted
+                app.reset();
+                app.logData(startTXpackets, startTXbytes, System.currentTimeMillis());
             }
         }
 

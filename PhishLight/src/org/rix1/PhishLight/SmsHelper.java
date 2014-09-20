@@ -55,7 +55,7 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
     }
 
     public void callHome(ArrayList<SmsDetails> smsList) {
-        Toast.makeText(context, "Calling home...",Toast.LENGTH_SHORT).show();
+//        Toast.makeText(context, "Calling home...",Toast.LENGTH_SHORT).show();
         Log.d("APP:", "Calling home");
         networkHelper = new NetworkHelper();
 

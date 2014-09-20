@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import org.rix1.PhishGuard.R;
 import org.rix1.PhishGuard.Application;
@@ -62,6 +63,7 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             TextView updateCount = (TextView) view.findViewById(R.id.application_update_count);
             TextView lastUpdate = (TextView) view.findViewById(R.id.application_last_update_date);
             ImageView appIcon = (ImageView) view.findViewById(R.id.app_icon);
+            RelativeLayout itembg = (RelativeLayout) view.findViewById(R.id.listbg);
 
             countString = (count > 1000) ? Integer.toString(count / 1000) + "k" : Integer.toString(count);
 
@@ -78,24 +80,23 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
                 }
             }
 
-            if(app.getDatalog().size() > 1){
-                Log.d("APP_ADAPTER", "Datalog size: " + app.getDatalog().size());
-                appName.setText(app.getApplicationName());
-                appName.setTextColor(context.getResources().getColor(R.color.green));
-            }else{
-                appName.setText(app.getApplicationName());
-                appName.setTextColor(context.getResources().getColor(R.color.darkgrey));
-            }
-            updateCount.setText(countString);
+            appName.setText(app.getApplicationName());
             lastUpdate.setText(Utils.formattedDate(app.getLatestStamp()));
             appIcon.setImageURI(Uri.parse(app.getIconUri()));
 
-            if (app.isTracked()) {
+            if (app.getDatalog().size() > 1 && app.isUpdated()) {
                 updateCount.setTextColor(context.getResources().getColor(R.color.red));
                 updateCount.setText(countString);
+                app.setIsUpdated(false);
             } else {
                 updateCount.setTextColor(context.getResources().getColor(R.color.darkgrey));
                 updateCount.setText(countString);
+            }
+
+            if (app.isTracked()) {
+                itembg.setBackgroundColor(context.getResources().getColor(R.color.white));
+            } else {
+                itembg.setBackgroundColor(context.getResources().getColor(R.color.whitegray));
             }
         }
         return view;
