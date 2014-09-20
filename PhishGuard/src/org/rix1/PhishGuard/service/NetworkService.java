@@ -1,10 +1,11 @@
-package org.rix1.PhishGuard;
+package org.rix1.PhishGuard.service;
 
 
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.net.TrafficStats;
 import android.util.Log;
+import org.rix1.PhishGuard.Application;
 import org.rix1.PhishGuard.service.TXservice;
 import org.rix1.PhishGuard.utils.Utils;
 import java.util.ArrayList;

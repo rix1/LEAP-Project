@@ -8,7 +8,7 @@ import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Log;
 import org.rix1.PhishGuard.Application;
-import org.rix1.PhishGuard.NetworkService;
+import org.rix1.PhishGuard.service.NetworkService;
 import org.rix1.PhishGuard.service.TXservice;
 
 import java.util.ArrayList;
