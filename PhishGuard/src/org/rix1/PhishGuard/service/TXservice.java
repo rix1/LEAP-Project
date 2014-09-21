@@ -8,7 +8,6 @@ import org.rix1.PhishGuard.*;
 import org.rix1.PhishGuard.utils.LoadApplications;
 import org.rix1.PhishGuard.utils.OnTaskCompleted;
 import org.rix1.PhishGuard.utils.Utils;
-
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
@@ -49,10 +48,10 @@ public class TXservice extends Service implements OnTaskCompleted, PropertyChang
      * notified when the async task is done through the OnTaskCompleted interface.
      * When this happens, it stores the updated list in sharedPreferences and stops
      * itself.
-     * @param intent
-     * @param flags
-     * @param startId
-     * @return
+     * @param intent The intent that is used to start the service
+     * @param flags Additional flags Android uses I guess.
+     * @param startId The ID of the process?
+     * @return An int.
      */
 
     public int onStartCommand(Intent intent, int flags, int startId){

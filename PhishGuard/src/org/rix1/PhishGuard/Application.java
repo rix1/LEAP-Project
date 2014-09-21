@@ -1,6 +1,8 @@
 package org.rix1.PhishGuard;
 
 
+import android.util.Log;
+
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Stack;
@@ -11,8 +13,6 @@ import java.util.Stack;
  */
 
 public class Application implements Comparable<Application>{
-
-    private static int globalCounter = 0;
 
     private final int uid;
     private final String packageName;
@@ -29,10 +29,6 @@ public class Application implements Comparable<Application>{
     private PropertyChangeSupport pcs = new PropertyChangeSupport(this);
 
 
-    public long getStartTXPackets() {
-        return startTXPackets;
-    }
-
     public long getStartTXBytes() {
         return startTXBytes;
     }
@@ -41,30 +37,20 @@ public class Application implements Comparable<Application>{
         this.uid = uid;
         this.packageName = packageName;
         this.applicationName = applicationName;
-
-        packetsSent = 0;
         this.startTXPackets = startPackets;
         this.startTXBytes = startBytes;
-
         this.iconURI = "android.resource://" + packageName + "/" + iconResID;
+        packetsSent = 0;
         isTracked = false;
-
         datalog = new Stack<Datalog>();
-        globalCounter++;
         isUpdated = false;
-
         updateLatestPackageStamp();
-
-        logData(startPackets, startBytes, latestTimeStamp);
     }
 
     public void updateLatestPackageStamp(){
         this.latestTimeStamp = System.currentTimeMillis();
     }
 
-    public void setLatestTimeStamp(long timestamp){
-        this.latestTimeStamp = timestamp;
-    }
 
     public void update(long packet, long bytes, long timeStamp){
         this.startTXBytes = bytes;
@@ -73,25 +59,32 @@ public class Application implements Comparable<Application>{
     }
 
     /**
-     * Check if we should update this dataobject
-     * @param
-     * @param
-     * @param
-     * @return True if new data has been recorded. This will be used to send notifications.
+     * This method logs data for tracked applications to a stack.
+     * @param packet The packets updated number of packets that have been sent since boot
+     * @param bytes The packets updated number of packets that have been sent since boot
+     * @param timeStamp The timestamp the change was recorded.
      */
 
     public void logData(long packet, long bytes, long timeStamp) {
-        if(datalog.size() > 0){
-            long dx = bytes - datalog.peek().getPacketsSinceBoot();
-        }
-        isUpdated = true;
+        Log.d("APP_NETWORK_APP", packet + " packet " + bytes + " bytes");
+
         if (!datalog.empty()) {
             Datalog prevRecord = datalog.peek();
-            pcs.firePropertyChange(this.applicationName, prevRecord.getByteSinceBoot(), bytes);
-            datalog.push(new Datalog(packet, bytes, timeStamp));
-        } else {
-            pcs.firePropertyChange(applicationName, startTXBytes, bytes);
-            datalog.add(new Datalog(packet, bytes, timeStamp));
+            long dx = bytes - prevRecord.getByteSinceBoot();
+            if(!isUpdated) {
+                Log.d("APP_NETWORK", "Lets update and fire. datalog is not empty");
+                pcs.firePropertyChange(this.applicationName, prevRecord.getByteSinceBoot(), bytes);
+                isUpdated = true;
+            }
+            datalog.push(new Datalog(packet, bytes, timeStamp, dx));
+        } else{
+            Log.d("APP_NETWORK", "Lets update and fire. datalog is empty");
+            if(!isUpdated) {
+                Log.d("APP_NETWORK", "Lets update and fire. datalog is empty");
+                pcs.firePropertyChange(applicationName, startTXBytes, bytes);
+                isUpdated = true;
+            }
+            datalog.push(new Datalog(packet, bytes, timeStamp, bytes));
         }
     }
 
@@ -124,10 +117,6 @@ public class Application implements Comparable<Application>{
         return uid;
     }
 
-    public static int getGlobalCounter() {
-        return globalCounter;
-    }
-
     public String getPackageName() {
         return packageName;
     }
@@ -139,24 +128,6 @@ public class Application implements Comparable<Application>{
     public long getLatestStamp() {
         return latestTimeStamp;
     }
-
-    /**
-     * @deprecated
-     * @param packetsSent
-     */
-
-    public void setPacketsSent(long packetsSent){
-        this.packetsSent = packetsSent;
-    }
-
-    /**
-     * @deprecated
-     * @return
-     */
-    public long getPacketsSent(){
-        return packetsSent;
-    }
-
 
     public String getIconUri(){
         return iconURI;

@@ -1,8 +1,8 @@
 package org.rix1.PhishGuard.adapter;
 
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,13 +25,11 @@ import java.util.ArrayList;
 public class ApplicationAdapter extends ArrayAdapter<Application>{
 
     private final Context context;
-    private final PackageManager packageManager;
     private final ArrayList<Application> outTXapps;
 
     public ApplicationAdapter(Context context, int textViewResourceID, ArrayList<Application> outTXApplications){
         super(context, textViewResourceID, outTXApplications);
         this.context = context;
-        packageManager = context.getPackageManager();
         this.outTXapps = outTXApplications;
 
     }
@@ -56,7 +54,7 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
 
         if (app != null) {
             int count = (int) app.getStartTXBytes();
-            String countString = "";
+            String countString;
 
             TextView appName = (TextView) view.findViewById(R.id.application_name);
             TextView updateCount = (TextView) view.findViewById(R.id.application_update_count);
@@ -83,11 +81,12 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             lastUpdate.setText(Utils.formattedDate(app.getLatestStamp()));
             appIcon.setImageURI(Uri.parse(app.getIconUri()));
 
-            if (app.getDatalog().size() > 1 && app.isUpdated()) {
+            if (app.isUpdated()) {
+                Log.d("APP_ADAPTER", "App is updated setting color red");
                 updateCount.setTextColor(context.getResources().getColor(R.color.red));
                 updateCount.setText(countString);
-                app.setIsUpdated(false);
             } else {
+                Log.d("APP_ADAPTER", "App is not updated setting color grey");
                 updateCount.setTextColor(context.getResources().getColor(R.color.darkgrey));
                 updateCount.setText(countString);
             }

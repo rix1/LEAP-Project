@@ -14,16 +14,15 @@ public class Datalog {
     private final long timeStamp;
     private long dx;
 
-    public Datalog(long packet, long bytes, long timeStamp){
+    public Datalog(long packet, long bytes, long timeStamp, long dx){
         this.packetsSinceBoot = packet;
         this.byteSinceBoot = bytes;
         this.timeStamp = timeStamp;
+        this.dx = dx;
     }
 
     public long getDx(){return dx;}
-    public long getPacketsSinceBoot() {
-        return packetsSinceBoot;
-    }
+
 
     public long getByteSinceBoot() {
         return byteSinceBoot;

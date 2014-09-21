@@ -80,7 +80,7 @@
             android:text="88"
             android:textSize="@android:dimen/app_icon_size"
             android:textStyle="italic"
-            android:textColor="@color/red"
+            android:textColor="@color/darkgrey"
             android:layout_alignParentRight="true"
             android:layout_marginRight="15dp"
             />

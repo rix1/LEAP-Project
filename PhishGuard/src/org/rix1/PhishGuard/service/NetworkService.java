@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.net.TrafficStats;
 import android.util.Log;
 import org.rix1.PhishGuard.Application;
-import org.rix1.PhishGuard.service.TXservice;
 import org.rix1.PhishGuard.utils.Utils;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +22,6 @@ public class NetworkService {
 
     private long startTXpackets = 0; // TX is transmitted
     private long startTXbytes = 0;
-    private ArrayList<Application> outApplications;
-    private PackageManager packageManager;
-    private boolean firstTimeFlag = true;
     private final PackageManager pm;
 
     public NetworkService(PackageManager pm){
@@ -34,8 +30,8 @@ public class NetworkService {
 
 
     /**
-     * Should return a list of all applications having outgoing communications
-     * @param appInfo
+     * Should sort out and return a list of all applications having outgoing communications
+     * @param appInfo A list of all installed applications.
      * @return A list of all applications having outgoing communications
      */
 
@@ -64,8 +60,7 @@ public class NetworkService {
 
     public ArrayList<Application> update(ArrayList<Application> applications, List<ApplicationInfo> appI){
 
-        ArrayList<Application> updatedList = new ArrayList<Application>();
-        updatedList = init(appI);
+        ArrayList<Application> updatedList = init(appI);
 
         Log.d("APP_NETWORK", "All apps: " + appI.size() + " - network apps: " + updatedList.size() + " - currentList: " + applications.size());
 
@@ -80,8 +75,8 @@ public class NetworkService {
 
             if(startTXbytes > app.getStartTXBytes()){ // This means the traffic has increased
                 if(app.isTracked()){
+                    Log.d("APP_NETWORK", "Should log data at this point. Is it updated? " + startTXbytes +" bytes " + startTXpackets + " packets");
                     app.logData(startTXpackets, startTXbytes, System.currentTimeMillis());
-                    Log.d("APP_NETWORK", "Should log data at this point ");
                 }
                 app.update(startTXpackets, startTXbytes, System.currentTimeMillis());
             }else if(startTXbytes < app.getStartTXBytes()){ // This means the device have been rebooted

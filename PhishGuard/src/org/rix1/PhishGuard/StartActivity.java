@@ -17,7 +17,6 @@ public class StartActivity extends Activity{
     private Switch aSwitch;
     private GlobalClass globalVars;
     private final Alarm alarm = new Alarm();
-    private boolean monitor;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,6 +98,5 @@ public class StartActivity extends Activity{
             Log.d("APP_START", " alarm set");
             alarm.SetAlarm(this);
         }
-        finish();
     }
 }

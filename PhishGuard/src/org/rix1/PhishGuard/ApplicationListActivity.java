@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.*;
 import android.widget.ListView;
-import android.widget.TextView;
 import org.rix1.PhishGuard.adapter.ApplicationAdapter;
 import org.rix1.PhishGuard.service.Alarm;
 import org.rix1.PhishGuard.utils.LoadApplications;
@@ -78,7 +77,8 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
 
     private void displayApplicationDialog(){
-        String message = getString(R.string.application_desc_start) + " " + currentApplication.getStartTXBytes() + " bytes.";
+        currentApplication.setIsUpdated(false);
+        String message = getString(R.string.application_desc_start) + " " + currentApplication.getStartTXBytes() + " bytes since the device booted.";
         message += "\n";
         if(currentApplication.getDatalog().size() > 1){
             message += "History:\n";
@@ -89,13 +89,10 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
         message += getString(R.string.application_desc_end);
         Log.d("APP_LIST", currentApplication.toString());
 
-        TextView dialogMessage = new TextView(this);
-        dialogMessage.setText(message);
-        dialogMessage.setGravity(Gravity.CENTER_HORIZONTAL);
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(currentApplication.getApplicationName());
-        builder.setView(dialogMessage);
+        builder.setMessage(message);
 
         builder.setPositiveButton("Yes, notify me", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
@@ -184,7 +181,6 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
             Log.d("APP_LIST", " alarm set");
             alarm.SetAlarm(this);
         }
-        finish();
     }
 
 
@@ -236,8 +232,8 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
     }
 
     /**
-     * Should only be called first time (on init)
-     * @param outApps
+     * Method from the OnTaskCompleted interface. Will get called when the async LoadApplications is done.
+     * @param outApps the list of applications that have made outgoing connections since boot.
      */
 
     @Override

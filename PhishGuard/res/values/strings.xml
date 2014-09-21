@@ -12,11 +12,12 @@
     <string name="application_desc_start">This application has sent</string>
     <string name="application_desc_end">Do you want to get notified next it happens?</string>
     <string name="android_security">
-        TODO: Change this!
-        A central design point of the Android security architecture is that no application, by default,
+        A central idea in Android security is that no application, by default,
         has permission to perform any operations that would adversely impact other applications, the operating system, or the user.
-        This includes reading or writing the user\'s private data (such as contacts or emails), reading or writing another application\'s
-        files, performing network access, keeping the device awake, and so on.
+        That is why you grant an application permissions upon install. But this step are often ignored, or accepted because lets face it -
+        "We really need this app!". When you\'re connected to the Internet, applications can send whatever information they want to wherever they want.
+        Phishguard provides users the ability to monitor not only which applications that are making outgoing connections,
+        but at what time they do it, and how much data they send out. In future versions, the application will even have the ability to block unwanted outgoing traffic!
     </string>
     <string name="menu">Main Menu</string>
     <string name="automonitor">Automatic monitoring</string>
