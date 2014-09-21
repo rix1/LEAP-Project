@@ -26,7 +26,7 @@ public class Alarm extends BroadcastReceiver {
         wakeLock.acquire();
 
         // Start service from here
-        Intent serviceIntent = new Intent(context, TXservice.class);
+        Intent serviceIntent = new Intent(context, NetworkService.class);
         context.startService(serviceIntent);
         Log.d("APP_ALARM", "Alarm fired. Instances: " + instances);
 

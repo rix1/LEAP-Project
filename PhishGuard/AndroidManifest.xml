@@ -34,7 +34,7 @@
                   android:label="@string/app_name">
         </activity>
 
-        <service android:name=".service.TXservice"/>
+        <service android:name=".service.NetworkService"/>
         <receiver android:name=".service.BootBroadcast">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>

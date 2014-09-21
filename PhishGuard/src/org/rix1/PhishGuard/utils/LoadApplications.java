@@ -9,7 +9,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import org.rix1.PhishGuard.Application;
 import org.rix1.PhishGuard.service.NetworkService;
-import org.rix1.PhishGuard.service.TXservice;
+import org.rix1.PhishGuard.service.TrafficFetcher;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,7 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
     private final PackageManager pm;
     private final Context context;
     private List<ApplicationInfo> allApplications;
-    private final NetworkService networkService;
+    private final TrafficFetcher trafficFetcher;
     private final OnTaskCompleted listener;
     private ArrayList<Application> outNetworkApps;
 
@@ -35,7 +35,7 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
         this.pm = pm;
         this.context = context;
         allApplications = new ArrayList<ApplicationInfo>();
-        networkService = new NetworkService(pm);
+        trafficFetcher = new TrafficFetcher(pm);
     }
 
     /**
@@ -53,10 +53,10 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
 
         if(shouldInit){
             Log.d("APP_ASYNC", "Init list: " + outNetworkApps.toString());
-            outNetworkApps = networkService.init(allApplications);
+            outNetworkApps = trafficFetcher.init(allApplications);
         }else {
             Log.d("APP_ASYNC", "Updating list: " + outNetworkApps.toString());
-            outNetworkApps = networkService.update(outNetworkApps, allApplications);
+            outNetworkApps = trafficFetcher.update(outNetworkApps, allApplications);
         }
         return null;
     }
@@ -92,7 +92,7 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPostExecute(Void result) {
-        if(!(listener instanceof TXservice))
+        if(!(listener instanceof NetworkService))
             progress.dismiss();
         Log.d("APP_ASYNC", "onPostExecute called...");
         listener.onTaskCompleted(outNetworkApps);
@@ -100,7 +100,7 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
     }
 
     protected void onPreExecute() {
-        if(!(listener instanceof TXservice))
+        if(!(listener instanceof NetworkService))
             progress = ProgressDialog.show(context, null, "Loading application info...");
         super.onPreExecute();
     }
