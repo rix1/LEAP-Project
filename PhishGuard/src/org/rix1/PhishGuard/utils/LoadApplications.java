@@ -40,22 +40,23 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
 
     /**
      * Structure of args: [0]: ShouldUpdate [2]: List<Application>
-     * @param args
-     * @return
+     * @param args The args are basically just the list and a boolean value to determine weather or not we should initialize or update the list
+     *             I had funny problems with the boolean value changing value on the other side of this method call.
+     * @return nothing.
      */
     @Override
     protected Void doInBackground(Object ... args) {
         Boolean shouldInit = ((Boolean) args[0]).booleanValue();
-        Log.d("APP_ASYNC", "Should we initialize now? args[0]: " + args[0] + " shouldinit: " + shouldInit);
+//        Log.d("APP_ASYNC", "Should we initialize now? args[0]: " + args[0] + " shouldinit: " + shouldInit);
         outNetworkApps = (ArrayList<Application>)args[1];
 
         allApplications = checkForLaunchIntent(pm.getInstalledApplications(PackageManager.GET_META_DATA));
 
         if(shouldInit){
-            Log.d("APP_ASYNC", "Init list: " + outNetworkApps.toString());
+//            Log.d("APP_ASYNC", "Init list: " + outNetworkApps.toString());
             outNetworkApps = trafficFetcher.init(allApplications);
         }else {
-            Log.d("APP_ASYNC", "Updating list: " + outNetworkApps.toString());
+//            Log.d("APP_ASYNC", "Updating list: " + outNetworkApps.toString());
             outNetworkApps = trafficFetcher.update(outNetworkApps, allApplications);
         }
         return null;
@@ -94,7 +95,7 @@ public class LoadApplications extends AsyncTask<Object, Void, Void> {
     protected void onPostExecute(Void result) {
         if(!(listener instanceof NetworkService))
             progress.dismiss();
-        Log.d("APP_ASYNC", "onPostExecute called...");
+//        Log.d("APP_ASYNC", "onPostExecute called...");
         listener.onTaskCompleted(outNetworkApps);
         super.onPostExecute(result);
     }

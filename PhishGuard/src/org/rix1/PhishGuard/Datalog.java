@@ -3,7 +3,8 @@ package org.rix1.PhishGuard;
 /**
  *
  * Created by Rikard Eide on 15/09/14.
- * Description:
+ * Description: Simple object containing enough information to store information about changes in
+ * outgoing network data for tracked applications
  */
 
 public class Datalog {

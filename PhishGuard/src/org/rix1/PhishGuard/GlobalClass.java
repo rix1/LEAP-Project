@@ -10,7 +10,8 @@ import java.util.List;
 
 /**
  * Created by Rikard Eide on 18/09/14.
- * Description: Global class to hold variables and flags
+ * Description: Global class to hold variables and flags. Some of these are not currently in use,
+ * but there could be a usage for them in the future.
  */
 
 public class GlobalClass extends Application{

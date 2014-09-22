@@ -7,7 +7,7 @@ import android.content.Intent;
 /**
  * Created by rikardeide on 18/09/14.
  * Desc: Broadcast receiver that gets notified when the device
- * boots, and starts the network service.
+ * boots, and starts the alarm.
  */
 
 public class BootBroadcast extends BroadcastReceiver {

@@ -9,10 +9,8 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
-import android.util.Log;
 import com.google.gson.Gson;
 import org.rix1.PhishGuard.*;
-
 import java.beans.PropertyChangeEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -22,7 +20,8 @@ import java.util.List;
 
 /**
  * Created by Rikard Eide on 12/09/14.
- * Description:
+ * Description: Class containing static methods used (more than once!) various places around the application.
+ * As an example, take a look at the store and retrive application state.
  */
 
 public class Utils {
@@ -50,7 +49,6 @@ public class Utils {
     }
 
     public static ArrayList<Application> getApplicationState(Context context){
-        final GlobalClass globalVars = (GlobalClass) context;
         ArrayList<Application> outNetworkApps = new ArrayList<Application>();
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
@@ -62,28 +60,25 @@ public class Utils {
             outNetworkApps = gson.fromJson(json, GlobalClass.APPLIST_TYPE);
 //            Log.d("APP_UTIL", "Data REstored. First application: " + outNetworkApps.get(0).toString());
 //            Log.d("APP_UTIL", "Data REstored: " + json);
-        }else Log.d("APP_UTIL", "JSON was empty");
-
+        }
+//        Log.d("APP_UTIL", "JSON was empty");
         return outNetworkApps;
     }
 
 
     // Helper method to store boolean config values
     public static void storeBooleanApplicationState(Context context, String variableName, Boolean value){
-        GlobalClass globalVars = (GlobalClass) context;
         SharedPreferences settings = context.getSharedPreferences(GlobalClass.PREFS_NAME, 0);
         settings.edit().putBoolean(variableName, value).commit();
     }
 
     public static boolean getApplicationBool(Context context, String variableName){
-        GlobalClass globalVars = (GlobalClass) context;
         SharedPreferences settings = context.getSharedPreferences(GlobalClass.PREFS_NAME, 0);
         return settings.getBoolean(variableName, true);
     }
 
 
     public static void storeApplicationState(Context context, ArrayList<Application> outNetworkApps){
-        final GlobalClass globalVars = (GlobalClass) context;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         SharedPreferences.Editor prefsEditor = prefs.edit();
 

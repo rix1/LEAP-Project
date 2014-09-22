@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Rikard Eide on 12/09/14.
- * Description:
+ * Description: Adapter that populates each row in the list view of ApplicationListActivity.
  */
 
 public class ApplicationAdapter extends ArrayAdapter<Application>{
@@ -82,11 +82,11 @@ public class ApplicationAdapter extends ArrayAdapter<Application>{
             appIcon.setImageURI(Uri.parse(app.getIconUri()));
 
             if (app.isUpdated()) {
-                Log.d("APP_ADAPTER", "App is updated setting color red");
+//                Log.d("APP_ADAPTER", "App is updated setting color red");
                 updateCount.setTextColor(context.getResources().getColor(R.color.red));
                 updateCount.setText(countString);
             } else {
-                Log.d("APP_ADAPTER", "App is not updated setting color grey");
+//                Log.d("APP_ADAPTER", "App is not updated setting color grey");
                 updateCount.setTextColor(context.getResources().getColor(R.color.darkgrey));
                 updateCount.setText(countString);
             }

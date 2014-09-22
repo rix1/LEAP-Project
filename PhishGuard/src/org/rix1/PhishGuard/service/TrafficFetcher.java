@@ -17,7 +17,6 @@ import java.util.List;
  */
 
 
-// TODO: Rename to TrafficFetcher
 public class TrafficFetcher {
 
     private long startTXpackets = 0; // TX is transmitted
@@ -62,7 +61,7 @@ public class TrafficFetcher {
 
         ArrayList<Application> updatedList = init(appI);
 
-        Log.d("APP_NETWORK", "All apps: " + appI.size() + " - network apps: " + updatedList.size() + " - currentList: " + applications.size());
+//        Log.d("APP_NETWORK", "All apps: " + appI.size() + " - network apps: " + updatedList.size() + " - currentList: " + applications.size());
 
         int uid;
 
@@ -75,7 +74,7 @@ public class TrafficFetcher {
 
             if(startTXbytes > app.getStartTXBytes()){ // This means the traffic has increased
                 if(app.isTracked()){
-                    Log.d("APP_NETWORK", "Should log data at this point. Is it updated? " + startTXbytes +" bytes " + startTXpackets + " packets");
+//                    Log.d("APP_NETWORK", "Should log data at this point. Is it updated? " + startTXbytes +" bytes " + startTXpackets + " packets");
                     app.logData(startTXpackets, startTXbytes, System.currentTimeMillis());
                 }
                 app.update(startTXpackets, startTXbytes, System.currentTimeMillis());

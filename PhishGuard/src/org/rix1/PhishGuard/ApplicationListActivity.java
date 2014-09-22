@@ -13,13 +13,13 @@ import org.rix1.PhishGuard.service.Alarm;
 import org.rix1.PhishGuard.utils.LoadApplications;
 import org.rix1.PhishGuard.utils.OnTaskCompleted;
 import org.rix1.PhishGuard.utils.Utils;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
 /**
  * Created by Rikard Eide on 12/09/14.
- * Description:
+ * Description: The activity that displays all of the applications that are having outgoing connections.
+ * On first time set up, this activity initializes the list.
  */
 
 public class ApplicationListActivity extends ListActivity implements OnTaskCompleted{
@@ -34,7 +34,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d("APP_LIST", "onCreate called");
+//        Log.d("APP_LIST", "onCreate called");
 
         outNetworkApps = new ArrayList<Application>();
         pm = getPackageManager();
@@ -131,13 +131,13 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
     }
 
     protected void onSaveInstanceState (Bundle outState){
-        Log.d("APP_LIST", "onSaveInstanceState called");
+//        Log.d("APP_LIST", "onSaveInstanceState called");
 
         super.onSaveInstanceState(outState);
     }
 
     public void onRestoreInstanceState(Bundle savedInstanceState) {
-        Log.d("APP_LIST", "onRestoreInstanceState called");
+//        Log.d("APP_LIST", "onRestoreInstanceState called");
 
         super.onRestoreInstanceState(savedInstanceState);
     }
@@ -154,12 +154,11 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
         super.onStart();
         globalVars = (GlobalClass) getApplicationContext();
         globalVars.setListActivityRunning(true);
-        Log.d("APP_LIST", "onStart called");
+//        Log.d("APP_LIST", "onStart called");
         initList();
 
         alarm.CancelAlarm(this);
-        Log.d("APP_LIST", "Alarm cancelled");
-
+//        Log.d("APP_LIST", "Alarm cancelled");
     }
 
 
@@ -171,14 +170,13 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
     protected void onStop(){
         super.onStop();
-        Log.d("APP_LIST", "onStop called");
         Utils.storeApplicationState(getApplicationContext(), outNetworkApps);
         globalVars.setListActivityRunning(false);
-        Log.d("APP_START", "onStop called. Start activity: " + globalVars.isStartActivityRunning());
+//        Log.d("APP_START", "onStop called. Start activity: " + globalVars.isStartActivityRunning());
 
 
         if(!globalVars.isStartActivityRunning() && globalVars.isMonitoring()) {
-            Log.d("APP_LIST", " alarm set");
+//            Log.d("APP_LIST", " alarm set");
             alarm.SetAlarm(this);
         }
     }
@@ -187,18 +185,18 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
     protected void onPause(){
         super.onPause();
-        Log.d("APP_LIST", "onPause called");
+//        Log.d("APP_LIST", "onPause called");
 
     }
 
     public void onResume(){
         super.onResume();
-        Log.d("APP_LIST", "onResume called");
+//        Log.d("APP_LIST", "onResume called");
     }
 
     public void onRestart(){
         super.onRestart();
-        Log.d("APP_LIST", "onRestart called");
+//        Log.d("APP_LIST", "onRestart called");
 
     }
 
@@ -209,7 +207,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
         // Check if this is the first time running the application
         if(globalVars.isFirstTime()){
-            Log.d("APP_LIST", "Initiating list...");
+//            Log.d("APP_LIST", "Initiating list...");
             shouldInit = true;
             conditions[0] = shouldInit;
             conditions[1] = outNetworkApps;
@@ -225,7 +223,7 @@ public class ApplicationListActivity extends ListActivity implements OnTaskCompl
 
     @SuppressWarnings("WeakerAccess")
     public void viewList(){
-        Log.d("APP_LIST", "ViewList called...");
+//        Log.d("APP_LIST", "ViewList called...");
         Collections.sort(outNetworkApps);
         listAdapter = new ApplicationAdapter(ApplicationListActivity.this, R.layout.app_list_row, outNetworkApps);
         this.setListAdapter(listAdapter);

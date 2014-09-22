@@ -1,15 +1,14 @@
 package org.rix1.PhishGuard;
 
-
-import android.util.Log;
-
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.util.Stack;
 
 /**
  * Created by Rikard Eide on 12/09/14.
- * Description: This is the most central data type in the data model.
+ * Description: This is the most central data type in the data model, and contains
+ * fields necessary to both track and display the other applications.
+ *
  */
 
 public class Application implements Comparable<Application>{
@@ -59,28 +58,26 @@ public class Application implements Comparable<Application>{
     }
 
     /**
-     * This method logs data for tracked applications to a stack.
+     * This method logs data for tracked applications to a stack. When invoked, it fires off a
+     * property change alert, so that subscribers to this gets notified.
      * @param packet The packets updated number of packets that have been sent since boot
      * @param bytes The packets updated number of packets that have been sent since boot
      * @param timeStamp The timestamp the change was recorded.
      */
 
     public void logData(long packet, long bytes, long timeStamp) {
-        Log.d("APP_NETWORK_APP", packet + " packet " + bytes + " bytes");
+//        Log.d("APP_NETWORK_APP", packet + " packet " + bytes + " bytes");
 
         if (!datalog.empty()) {
             Datalog prevRecord = datalog.peek();
             long dx = bytes - prevRecord.getByteSinceBoot();
             if(!isUpdated) {
-                Log.d("APP_NETWORK", "Lets update and fire. datalog is not empty");
                 pcs.firePropertyChange(this.applicationName, prevRecord.getByteSinceBoot(), bytes);
                 isUpdated = true;
             }
             datalog.push(new Datalog(packet, bytes, timeStamp, dx));
         } else{
-            Log.d("APP_NETWORK", "Lets update and fire. datalog is empty");
             if(!isUpdated) {
-                Log.d("APP_NETWORK", "Lets update and fire. datalog is empty");
                 pcs.firePropertyChange(applicationName, startTXBytes, bytes);
                 isUpdated = true;
             }

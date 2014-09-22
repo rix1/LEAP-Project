@@ -18,6 +18,8 @@ public class StartActivity extends Activity{
     private GlobalClass globalVars;
     private final Alarm alarm = new Alarm();
 
+    //      Called when the activity is first created.
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -25,9 +27,6 @@ public class StartActivity extends Activity{
         setContentView(R.layout.main);
         final GlobalClass globalVars = (GlobalClass) getApplicationContext();
 
-        /*
-      Called when the activity is first created.
-     */
         Button showListbtn = (Button) findViewById(R.id.btn_showList);
         Button aboutbtn = (Button) findViewById(R.id.btn_about);
         aSwitch = (Switch) findViewById(R.id.switch_monitor);
@@ -37,7 +36,6 @@ public class StartActivity extends Activity{
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 globalVars.setMonitoring(aSwitch.isChecked());
-                Log.d("APP_START", "Switch!");
             }
         });
 
@@ -75,7 +73,7 @@ public class StartActivity extends Activity{
 
     protected  void onStart() {
         super.onStart();
-        Log.d("APP_START", "onStart called");
+//        Log.d("APP_START", "onStart called");
         globalVars = (GlobalClass) getApplicationContext();
         globalVars.setStartActivityRunning(true);
 
@@ -83,19 +81,19 @@ public class StartActivity extends Activity{
         // in sharedPreferences, we turn off the monitoring
         // when the application starts.
         alarm.CancelAlarm(this);
-        Log.d("APP_START", "Alarm cancelled");
+//        Log.d("APP_START", "Alarm cancelled");
 
     }
 
     protected void onStop(){
         super.onStop();
         globalVars.setStartActivityRunning(false);
-        Log.d("APP_START", "onStop called. List activity: " + globalVars.isListActivityRunning());
+//        Log.d("APP_START", "onStop called. List activity: " + globalVars.isListActivityRunning());
 
         // Means that the application (UI) is no longer showing
         // and monitoring can begin again
         if(!globalVars.isListActivityRunning() && globalVars.isMonitoring()) {
-            Log.d("APP_START", " alarm set");
+//            Log.d("APP_START", " alarm set");
             alarm.SetAlarm(this);
         }
     }

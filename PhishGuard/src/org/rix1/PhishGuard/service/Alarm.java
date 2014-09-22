@@ -11,7 +11,7 @@ import org.rix1.PhishGuard.GlobalClass;
 
 /**
  * Created by rikardeide on 18/09/14.
- * Broadcast receiver to schedule the running of the TX service
+ * Broadcast receiver to schedule the running of the NetworkService
  */
 
 public class Alarm extends BroadcastReceiver {
@@ -28,24 +28,22 @@ public class Alarm extends BroadcastReceiver {
         // Start service from here
         Intent serviceIntent = new Intent(context, NetworkService.class);
         context.startService(serviceIntent);
-        Log.d("APP_ALARM", "Alarm fired. Instances: " + instances);
+//        Log.d("APP_ALARM", "Alarm fired. Instances: " + instances);
 
         wakeLock.release();
     }
 
+    // THe GlobalClass.updateInterval is the interval in which the alarm, and the service will be run.
     public void SetAlarm(Context context){
         AlarmManager alarmManager = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, Alarm.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, i, 0);
-        /*
-      This is the interval in which the alarm, and the service will be run.
-     */
         long INTERVAL = GlobalClass.updateInterval;
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), INTERVAL, pendingIntent);
     }
 
     public void CancelAlarm(Context context){
-        Log.d("APP_ALARM", "Alarm cancelled by: " + context.toString());
+//        Log.d("APP_ALARM", "Alarm cancelled by: " + context.toString());
         Intent intent = new Intent(context, Alarm.class);
         PendingIntent sender = PendingIntent.getBroadcast(context,0,intent,0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
