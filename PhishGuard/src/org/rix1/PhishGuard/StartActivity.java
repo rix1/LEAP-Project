@@ -12,6 +12,12 @@ import android.widget.Switch;
 import org.rix1.PhishGuard.service.Alarm;
 
 
+/**
+ * Created by Rikard Eide on 10/09/14.
+ * Description: First activity to run when opening the application. Nothing special to see here...
+ *
+ **/
+
 public class StartActivity extends Activity{
 
     private Switch aSwitch;
