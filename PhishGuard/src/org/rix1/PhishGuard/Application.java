@@ -9,7 +9,7 @@ import java.util.Stack;
 
 /**
  * Created by Rikard Eide on 12/09/14.
- * Description:
+ * Description: This is the most central data type in the data model.
  */
 
 public class Application implements Comparable<Application>{

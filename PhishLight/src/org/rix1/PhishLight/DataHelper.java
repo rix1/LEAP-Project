@@ -26,24 +26,23 @@ public class DataHelper {
     }
 
 
-    // TODO: Change hard coded values with device information
     public List getData( SmsDetails sms) {
         nameValuePairs = new ArrayList<BasicNameValuePair>(2);
         
         BankDetails bankSms = sms.getBankDetails();
-        
-        nameValuePairs.add( new BasicNameValuePair("bankName", bankSms.getBankName()) );
-        nameValuePairs.add( new BasicNameValuePair("transactionAmount", bankSms.getTransactionAmount().toString()) );
+
         nameValuePairs.add(getFullname());
-        nameValuePairs.add( new BasicNameValuePair("transactionType", bankSms.getTransactionType()) );
-        nameValuePairs.add( new BasicNameValuePair("availableBalance", bankSms.getAvailableBalance().toString()) );
-        nameValuePairs.add( new BasicNameValuePair("transactionTime", bankSms.getTransactionTime()) );
-        nameValuePairs.add( new BasicNameValuePair("transactionDate", bankSms.getTransactionDate().toString()) );
-        nameValuePairs.add( new BasicNameValuePair("transactionPlace", bankSms.getTransactionPlace()) );
-        nameValuePairs.add( new BasicNameValuePair("transactionContent", bankSms.getTransactionContent()) );
-        nameValuePairs.add( new BasicNameValuePair("smsTime", sms.getSmsDate().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("bankName", bankSms.getBankName()) );
+        nameValuePairs.add( new BasicNameValuePair("transTime", bankSms.getTransactionTime()) );
+        nameValuePairs.add( new BasicNameValuePair("transDate", bankSms.getTransactionDate().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("transPlace", bankSms.getTransactionPlace()) );
+        nameValuePairs.add( new BasicNameValuePair("transType", bankSms.getTransactionType()) );
+        nameValuePairs.add( new BasicNameValuePair("transAmount", bankSms.getTransactionAmount().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("accBalance", bankSms.getAvailableBalance().toString()) );
         nameValuePairs.add( new BasicNameValuePair("smsId", sms.getSmsId().toString()  ) );
-        nameValuePairs.add( new BasicNameValuePair("smsPhoneNumber", sms.getSmsPhoneNumber()) );
+        nameValuePairs.add( new BasicNameValuePair("smsTime", sms.getSmsDate().toString()) );
+        nameValuePairs.add( new BasicNameValuePair("smsNum", sms.getSmsPhoneNumber()) );
+        nameValuePairs.add( new BasicNameValuePair("smsContent", bankSms.getTransactionContent()) );
 
         // Just for testing purposes
         //printData();
@@ -82,8 +81,8 @@ public class DataHelper {
             }
         }
         if(possibleFullname.equals(""))
-            return new BasicNameValuePair("accountHolderfullName", "No name found");
-        else return new BasicNameValuePair("accountHolderfullName", possibleFullname);
+            return new BasicNameValuePair("userInfoName", "No name found");
+        else return new BasicNameValuePair("userInfoName", possibleFullname);
     }
 
 
