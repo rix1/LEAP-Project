@@ -1,7 +1,7 @@
 Let's Go Phishing!
 =============
 
-Two Android applications and a small web-server created for the 2014 Capstone project in CSC3003S at UCT. The goal of the 'Let's Go Phishing' (abbreviated 'LEAP' for some reason) project was to come up with an attack model based on [phishing](http://en.wikipedia.org/wiki/Phishing "Wikipedia on phishing") and then a countermeasure to said model. The full report can be found [here](/path/to/img.jpg "Capstone Project LEAP Final Report").
+Two Android applications and a small web-server created for the 2014 Capstone project in CSC3003S at UCT. The goal of the 'Let's Go Phishing' (abbreviated 'LEAP' for some reason) project was to come up with an attack model based on [phishing](http://en.wikipedia.org/wiki/Phishing "Wikipedia on phishing") and then a countermeasure to said model. The full report can be found [here](FinalReport.pdf "Capstone Project LEAP Final Report").
 
 ### Modules
 
