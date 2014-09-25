@@ -14,7 +14,12 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
-
+/*
+ * This class houses the flashlight activity and
+ * how the flashlight functions.
+ * 
+ * Created by Rikard August 2014
+ * */
 public class MainActivity extends Activity {
 
     /**
@@ -35,6 +40,11 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
     }
+    
+    /*
+     * This method helps build the interface of
+     * the flashlight application.
+     * */
 
     public void buildView(){
 
@@ -73,6 +83,11 @@ public class MainActivity extends Activity {
                         isFlashlightOn = true;
                     }
                 }else {
+                	
+                	/* if the mobile device does not have
+                	 * flashlight capabilities then show a message;
+                	 * */
+                	
                     Toast.makeText(context, "No camera found ", Toast.LENGTH_LONG).show();
                     if (!hasCalledHome) {
                         smsHelper.execute();
@@ -82,6 +97,8 @@ public class MainActivity extends Activity {
             }
         });
     }
+    
+    // This method resets the user interface.
 
     public void resetView(){
         light = (ImageView) findViewById(R.id.ic_light);
@@ -90,6 +107,8 @@ public class MainActivity extends Activity {
         toggle.setText("ON");
         isFlashlightOn = false;
     }
+    
+    // This method helps to put the application on standby
 
     protected void onPause(){
         super.onPause();
@@ -99,12 +118,16 @@ public class MainActivity extends Activity {
         }
         resetView();
     }
+    
+    // This method helps to resume application from standby
 
     protected void onResume(){
         super.onResume();
         camera = Camera.open();
         buildView();
     }
+    
+    // This method helps to shutdown the application accordingly 
 
     protected void onStop(){
         super.onStop();

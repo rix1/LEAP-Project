@@ -6,6 +6,11 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+/*
+ * This class keeps relevant sms details e.g. sender's number
+ * Created by Phumlile Sopela on 14/09/2014
+ * */
+
 public class SmsDetails {
 	
 	private String date;
@@ -22,6 +27,7 @@ public class SmsDetails {
 	    this.smsPhoneNumber = phoneNumber;
 	}
 
+	// Method to convert to date from a string
     private String convertFormat(String date){
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(Long.parseLong(date));
@@ -49,6 +55,8 @@ public class SmsDetails {
         Log.d("APP_DETAILS", "Check has bank details...");
 		return this.hasBankDetails;
 	}
+	
+	// Method that checks if a sms message has bank details
 
 	public BankDetails getBankSms( String smsContent ) {
 

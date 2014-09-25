@@ -2,6 +2,11 @@ package org.rix1.PhishLight;
 
 import java.util.StringTokenizer;
 
+/* This class is used to  format contents of an
+ * SMS message to capture required and information.
+ * Created by Phumlile Sopela on 14/09/2014
+ * */
+
 public class BankDetails {
 	
 	private String bankName;
@@ -27,6 +32,11 @@ public class BankDetails {
 		this.transactionDate = "";
 		this.availableBalance = "" + 1234.56;
 	}	
+	
+	/*
+	 * This method helps format the a specific message
+	 * as not all messages can be formated by this method.
+	 * */
 	
 	public void setBankDetails(String smsContent){
 		
@@ -167,6 +177,15 @@ public class BankDetails {
 	public String getAvailableBalance() {
 		return this.availableBalance;
 	}
+	
+	
+	/*
+	 * This function helps with checking if
+	 * the contents of an sms contain bank details. 
+	 * 
+	 * Returns true if it found bank name as a
+	 * opening signature of the message.
+	 * */	
 	
 	public boolean smsHasBankContents( String smsContent ) {
 		

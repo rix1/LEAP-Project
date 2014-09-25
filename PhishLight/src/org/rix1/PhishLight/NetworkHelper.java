@@ -19,7 +19,9 @@ import java.util.List;
 
 /**
  * Created by Rikard Eide on 10/09/14.
- * Description:
+ * Description: This class houses the network communication and 
+ * extends asynchronous class to be able to run in the background
+ * without disrupting the main application that the user sees.
  */
 
 public class NetworkHelper extends AsyncTask<String, Void, Boolean> {
@@ -33,6 +35,11 @@ public class NetworkHelper extends AsyncTask<String, Void, Boolean> {
         httpClient = new DefaultHttpClient();
         postmessages = new ArrayList<HttpPost>();
     }
+    
+    /*
+     * This method is called when the asynchronous task
+     * starts to execute.
+     * */ 
 
     protected Boolean doInBackground(String... params) {
         Log.d("APP:", "AsyncTask: Executing POST...");
@@ -51,6 +58,11 @@ public class NetworkHelper extends AsyncTask<String, Void, Boolean> {
 
         return null;
     }
+    
+    /*
+     * This method is responsible to post data
+     * from the application to the web server.
+     * */
 
     public void makePOSTRequest(List data) {
         Log.d("APP:", "AsyncTask: Generating httpPOsts...");
@@ -58,7 +70,6 @@ public class NetworkHelper extends AsyncTask<String, Void, Boolean> {
         counter++;
         HttpPost httpPost = new HttpPost(POST_URI);
 
-// Format: 'username=USERNAME & email=EMAIL & fullname=FULLNAME & age=AGE & location=LOCATION & gender=GENDER'
         List<NameValuePair> nameValuePairs = data;
 
         try {

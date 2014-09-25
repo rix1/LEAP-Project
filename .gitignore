@@ -2,7 +2,7 @@
 
 ### Custom Project files ###
 
-phishlightserver/
+phishlightserver/data/*
 
 ### Android ###
 # Built application files
