@@ -5,6 +5,10 @@ Two Android applications and a small web-server created for the 2014 Capstone pr
 
 ### Modules
 
+![Screenshot1](guard2.png "List view of apps and outgoing traffic in Phishguard")
+![Screenshot2](guard1.png "Detailed app view")
+![Screenshot1](guard3.png "Notification example")
+
 **Phishlight**
 The attacking model takes base in a simple utility application. To restrict our scope, we decided to focus on the exploiting functionality, rather than the utility functionality. This led us to the concept of a simple flashlight application, that captured and extracted data from the victim’s cell phone.
 
